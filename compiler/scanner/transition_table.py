@@ -30,6 +30,25 @@ class TransitionTable:
             row = OrderedDict()
             state_transitions = lines[i]
             for j in range(len(keys)):
-                row[keys[j]] = state_transitions[j]
+                row[keys[j]] = int(state_transitions[j])
 
             self.table.append(row)
+
+    def is_final_state(self, state: int) -> bool:
+        """
+        Check if the given state is a final state
+
+        :param state: int, state to check
+        :return: bool
+        """
+        return self.table[state]["Final_Token"] == 1
+
+    def get_state(self, current_state: int, current_char: str) -> int:
+        """
+        Get next state given the current state and an input character
+
+        :param current_state:
+        :param current_char:
+        :return: int
+        """
+        return self.table[current_state][current_char]
