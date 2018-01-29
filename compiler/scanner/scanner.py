@@ -154,7 +154,13 @@ class Scanner:
             token = self.next_token()
             self.sequence.append(token)
 
-    def log(self, to_file: bool) -> None:
+    def log(self, to_file: bool=False) -> None:
+        """
+        Output results of scanning file
+
+        :param to_file: flag to optionally print results to files for validation
+        :return: None
+        """
         if to_file:
             token_file = open('output/tokens', 'w')
             error_file = open('output/errors', 'w')

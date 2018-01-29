@@ -1,7 +1,16 @@
+import sys
 from compiler.scanner.scanner import Scanner
-from compiler.tools import regular_expressions as RE
-from compiler.scanner.transition_table import TransitionTable
 
-s = Scanner("compiler/samples/sample_2")
+args_len: int = len(sys.argv)
+
+if args_len >= 2:
+    s = Scanner(sys.argv[1])
+else:
+    s = Scanner()
+
 s.scan_file()
-s.log(True)
+
+if args_len >= 3:
+    s.log(sys.argv[2])
+else:
+    s.log()

@@ -58,7 +58,7 @@ class TransitionTable:
         self.state_token[24] = constants.T_R_IS_EQUALS
         self.state_token[26] = constants.T_R_LESS_THAN
         self.state_token[28] = constants.T_R_LESS_THAN_OR_GREATER_THAN
-        self.state_token[38] = constants.T_R_LESS_THAN_OR_EQUAL
+        self.state_token[30] = constants.T_R_LESS_THAN_OR_EQUAL
         self.state_token[32] = constants.T_R_GREATER_THAN
         self.state_token[33] = constants.T_R_GREATER_THAN_OR_EQUAL
         self.state_token[34] = constants.T_R_SEMI_COLON
