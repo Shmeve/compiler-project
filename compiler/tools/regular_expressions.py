@@ -2,7 +2,7 @@ import re
 
 
 def l_e(string: str) -> bool:
-    return bool(re.match('[a-df-gA-Z]', string))
+    return bool(re.match('[a-df-zA-Z]', string))
 
 
 def e(string: str) -> bool:
@@ -16,3 +16,10 @@ def d_0(string: str) -> bool:
 def zero(string: str) -> bool:
     return string == '0'
 
+
+def eol(string: str) -> bool:
+    return string == '\n'
+
+
+def eof(string: str) -> bool:
+    return string == ''
