@@ -44,12 +44,15 @@ class Scanner:
 
             if self.table.is_final_state(self.current_state):
                 token_found = True
-                token.lexeme = self.lookup_token(self.current_state, token.string)
+                token.token = self.lookup_token(self.current_state, token.lexeme)
 
                 if read_char is not "\n":
                     self.backup_char()
+            elif read_char is "EOF":
+                token.token = constants.T_R_EOF
+                return token
             else:
-                token.string += read_char
+                token.lexeme += read_char
 
         return token
 
@@ -65,7 +68,10 @@ class Scanner:
         else:
             self.char_position += 1
 
-        return self.file[self.line_number][self.char_position]
+        if self.line_number < len(self.file) and self.char_position < len(self.file[self.line_number]):
+            return self.file[self.line_number][self.char_position]
+        else:
+            return 'EOF'
 
     def backup_char(self) -> str:
         """
@@ -112,6 +118,9 @@ class Scanner:
         :param input_char: Character to convert
         :return: str
         """
+        if RE.eof(input_char):
+            return "EOF"
+
         if RE.l_e(input_char):
             return "non_e"
 
@@ -127,7 +136,17 @@ class Scanner:
         if RE.eol(input_char):
             return "EOL"
 
-        if RE.eof(input_char):
-            return "EOF"
-
         return input_char   # Read as is (special reserved character)
+
+    def scan_file(self) -> None:
+        """
+        Main driver of the lexical analyzer. Scan file, convert to tokens and handel errors.
+
+        :return: None
+        """
+        token = self.next_token()
+        self.sequence.append(token.token)
+
+        while token.token is not constants.T_R_EOF:
+            token = self.next_token()
+            self.sequence.append(token.token)

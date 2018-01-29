@@ -8,7 +8,7 @@ class TestToken(unittest.TestCase):
 
         self.assertEqual(t.line, 0)
         self.assertEqual(t.column, 0)
-        self.assertEqual(t.lexeme, "")
+        self.assertEqual(t.token, "")
 
 
 if __name__ == '__main__':

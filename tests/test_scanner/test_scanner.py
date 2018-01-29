@@ -11,13 +11,13 @@ class TestScanner(unittest.TestCase):
         self.assertEqual(1, 1)
 
     def test_next_token(self):
-        self.assertEqual(self.s.next_token().lexeme, constants.T_R_INT)
-        self.assertEqual(self.s.next_token().lexeme, constants.T_A_ID)
-        self.assertEqual(self.s.next_token().lexeme, constants.T_R_FLOAT)
-        self.assertEqual(self.s.next_token().lexeme, constants.T_R_GET)
-        self.assertEqual(self.s.next_token().lexeme, constants.T_R_PUT)
-        self.assertEqual(self.s.next_token().lexeme, constants.T_A_INTEGER)
-        self.assertEqual(self.s.next_token().lexeme, constants.T_E_LEADING_ZERO)
+        self.assertEqual(self.s.next_token().token, constants.T_R_INT)
+        self.assertEqual(self.s.next_token().token, constants.T_A_ID)
+        self.assertEqual(self.s.next_token().token, constants.T_R_FLOAT)
+        self.assertEqual(self.s.next_token().token, constants.T_R_GET)
+        self.assertEqual(self.s.next_token().token, constants.T_R_PUT)
+        self.assertEqual(self.s.next_token().token, constants.T_A_INTEGER)
+        self.assertEqual(self.s.next_token().token, constants.T_E_LEADING_ZERO)
 
     def test_next_char(self):
         self.assertEqual(self.s.next_char(), 'i')

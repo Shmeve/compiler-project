@@ -22,4 +22,4 @@ def eol(string: str) -> bool:
 
 
 def eof(string: str) -> bool:
-    return string == ''
+    return string == 'EOF'

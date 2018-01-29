@@ -42,6 +42,7 @@ T_R_GET = "T_R_GET"
 T_R_PUT = "T_R_PUT"
 T_R_RETURN = "T_R_RETURN"
 T_R_PROGRAM = "T_R_PROGRAM"
+T_R_EOF = "T_R_EOF"
 
 # T_E: Tokens for Error Conditions
 T_E_LEADING_ZERO = "T_E_LEADING_ZERO"
