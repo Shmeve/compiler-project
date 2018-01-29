@@ -16,7 +16,7 @@ Section: Winter 2018 - NN
 6.  `deactivate`
 
 ## Running the Compiler
-`python main.py`
+`python main.py [source-file-path] [output-to-file-boolean]`
 
 ## Testing Project
 This projects test suit can be run using [nose (installed via requirements.txt)](http://nose.readthedocs.io/en/latest/)
