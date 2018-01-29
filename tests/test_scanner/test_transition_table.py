@@ -6,6 +6,7 @@ class TestTransitionTable(unittest.TestCase):
     def setUp(self):
         self.table = TransitionTable("compiler/tools/state_transition_table.csv")
         self.table.build_table()
+        self.table.build_state_token_list()
 
     def test_is_final_state(self):
         self.assertEqual(self.table.is_final_state(25), False)
