@@ -1,6 +1,7 @@
 from compiler.scanner.token import Token
 from compiler.scanner.transition_table import TransitionTable
 from compiler.tools import regular_expressions as RE
+from compiler.tools import constants
 
 
 class Scanner:
@@ -37,12 +38,18 @@ class Scanner:
         token_found = False
 
         while not token_found:
-            read_char = self.input_to_transition_table_key(self.next_char())
-            self.current_state = self.table.get_state(self.current_state, read_char)
+            read_char = self.next_char()
+            transition = self.input_to_transition_table_key(read_char)
+            self.current_state = self.table.get_state(self.current_state, transition)
 
             if self.table.is_final_state(self.current_state):
                 token_found = True
-                token.lexeme = self.lookup_token(self.current_state)
+                token.lexeme = self.lookup_token(self.current_state, token.string)
+
+                if read_char is not "\n":
+                    self.backup_char()
+            else:
+                token.string += read_char
 
         return token
 
@@ -82,14 +89,18 @@ class Scanner:
         """
         return self.file[self.line_number][self.char_position]
 
-    def lookup_token(self, state: int) -> str:
+    def lookup_token(self, state: int, string: str="") -> str:
         """
         Look up the token for the specified final state.
 
         :param state: a final state
+        :param string: string that lead to current state
         :return: str
         """
-        # TODO: Handle T_A_ID's are reserved keywords
+        token = self.table.state_token[state]
+
+        if token is constants.T_A_ID and string in constants.RESERVED_IDS.keys():
+            return constants.RESERVED_IDS[string]
 
         return self.table.state_token[state]
 

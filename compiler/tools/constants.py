@@ -50,4 +50,20 @@ T_E_FLOAT_FORMAT = "T_E_FLOAT_FORMAT"
 T_E_BLOCK_COMMENT_FORMAT = "T_E_BLOCK_COMMENT_FORMAT"
 T_E_UNEXPECTED_FORMAT = "T_E_UNEXPECTED_FORMAT"
 
-
+# Reserved identifiers
+RESERVED_IDS = {
+    "and": T_R_AND,
+    "not": T_R_NOT,
+    "or": T_R_OR,
+    "if": T_R_IF,
+    "then": T_R_THEN,
+    "else": T_R_ELSE,
+    "for": T_R_FOR,
+    "class": T_R_CLASS,
+    "int": T_R_INT,
+    "float": T_R_FLOAT,
+    "get": T_R_GET,
+    "put": T_R_PUT,
+    "return": T_R_RETURN,
+    "program": T_R_PROGRAM
+}
