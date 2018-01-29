@@ -11,7 +11,7 @@ class Scanner:
 
         :param source_file: str referencing the location of a file to be analyzed
         """
-        self.table: TransitionTable = TransitionTable()
+        self.table: TransitionTable = TransitionTable("compiler/tools/state_transition_table.csv")
         self.current_state: int = 1
         self.sequence: list = []
         self.file: list = []
@@ -46,12 +46,13 @@ class Scanner:
                 token_found = True
                 token.token = self.lookup_token(self.current_state, token.lexeme)
 
-                if read_char is not "\n":
+                if self.table.requires_back_track(self.current_state):
+                    token.lexeme += read_char
                     self.backup_char()
             elif read_char is "EOF":
                 token.token = constants.T_R_EOF
                 return token
-            else:
+            elif read_char is not "\n":
                 token.lexeme += read_char
 
         return token
@@ -136,6 +137,9 @@ class Scanner:
         if RE.eol(input_char):
             return "EOL"
 
+        if RE.sp(input_char):
+            return "sp"
+
         return input_char   # Read as is (special reserved character)
 
     def scan_file(self) -> None:
@@ -145,8 +149,13 @@ class Scanner:
         :return: None
         """
         token = self.next_token()
-        self.sequence.append(token.token)
+        self.sequence.append(token)
 
         while token.token is not constants.T_R_EOF:
             token = self.next_token()
-            self.sequence.append(token.token)
+            self.sequence.append(token)
+
+    def log(self) -> None:
+        with open('output/tokens', 'w') as file:
+            for t in self.sequence:
+                file.write(t.token+',')

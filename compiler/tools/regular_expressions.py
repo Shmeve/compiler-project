@@ -23,3 +23,7 @@ def eol(string: str) -> bool:
 
 def eof(string: str) -> bool:
     return string == 'EOF'
+
+
+def sp(string: str) -> bool:
+    return string == ' '

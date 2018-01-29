@@ -15,7 +15,7 @@ class TransitionTable:
         self.state_token: list = []
 
         # Generate list of empty strings for each state
-        for i in range(60):
+        for i in range(61):
             self.state_token.append("")
 
     def build_table(self) -> None:
@@ -51,7 +51,7 @@ class TransitionTable:
         self.state_token[3] = constants.T_A_ID
         self.state_token[5] = constants.T_A_INTEGER
         self.state_token[17] = constants.T_A_FLOAT
-        self.state_token[19] = constants.T_A_ID
+        self.state_token[19] = constants.T_A_INTEGER
 
         # Reserved keyword/operator states
         self.state_token[22] = constants.T_R_EQUALS
@@ -70,6 +70,7 @@ class TransitionTable:
         self.state_token[41] = constants.T_R_MINUS
         self.state_token[42] = constants.T_R_MULTIPLY
         self.state_token[47] = constants.T_R_LINE_COMMENT
+        self.state_token[60] = constants.T_R_LINE_COMMENT
         self.state_token[48] = constants.T_R_BLOCK_COMMENT
         self.state_token[59] = constants.T_R_DIVIDE
         self.state_token[50] = constants.T_R_OPEN_PARENTHESIS
@@ -85,7 +86,7 @@ class TransitionTable:
         self.state_token[9] = constants.T_E_TRAILING_ZERO
         self.state_token[16] = constants.T_E_FLOAT_FORMAT
         self.state_token[49] = constants.T_E_BLOCK_COMMENT_FORMAT
-        self.state_token[56] = constants.T_E_UNEXPECTED_FORMAT
+        self.state_token[56] = constants.T_E_UNEXPECTED_CHAR
 
     def is_final_state(self, state: int) -> bool:
         """
@@ -95,6 +96,15 @@ class TransitionTable:
         :return: bool
         """
         return self.table[state]["Final_Token"] == 1
+
+    def requires_back_track(self, state: int) -> bool:
+        """
+        Check if the given final state requires backtracking
+
+        :param state: final state to check
+        :return: bool
+        """
+        return self.table[state]["Back_Track"] == 1
 
     def get_state(self, current_state: int, current_char: str) -> int:
         """
