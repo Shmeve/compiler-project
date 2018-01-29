@@ -4,4 +4,4 @@ from compiler.scanner.transition_table import TransitionTable
 
 s = Scanner("compiler/samples/sample_2")
 s.scan_file()
-s.log()
+s.log(True)

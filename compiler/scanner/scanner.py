@@ -47,12 +47,11 @@ class Scanner:
                 token.token = self.lookup_token(self.current_state, token.lexeme)
 
                 if self.table.requires_back_track(self.current_state):
-                    token.lexeme += read_char
                     self.backup_char()
             elif read_char is "EOF":
                 token.token = constants.T_R_EOF
                 return token
-            elif read_char is not "\n":
+            elif read_char is not "\n" and read_char is not ' ':
                 token.lexeme += read_char
 
         return token
@@ -155,7 +154,23 @@ class Scanner:
             token = self.next_token()
             self.sequence.append(token)
 
-    def log(self) -> None:
-        with open('output/tokens', 'w') as file:
+    def log(self, to_file: bool) -> None:
+        if to_file:
+            token_file = open('output/tokens', 'w')
+            error_file = open('output/errors', 'w')
+
             for t in self.sequence:
-                file.write(t.token+',')
+                if t.is_error():
+                    error_file.write('{:s} at line {:d}, position {:d}\n'.format(
+                        t.get_error_message(), t.line, t.column
+                    ))
+
+                token_file.write(t.token+',')
+
+                print('{:s} {:s} {:d},{:d}'.format(t.token, t.lexeme, t.line, t.column))
+
+            token_file.close()
+            error_file.close()
+        else:
+            for t in self.sequence:
+                print('{:s} {:s} {:d},{:d}'.format(t.token, t.lexeme, t.line, t.column))
