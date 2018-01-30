@@ -34,11 +34,16 @@ class Scanner:
         :return: Token
         """
         self.current_state = 1
-        token = Token(self.line_number, self.char_position)
+        token = Token(self.line_number + 1, self.char_position + 2)
         token_found = False
 
         while not token_found:
             read_char = self.next_char()
+
+            if token.lexeme is '' and read_char is '\n':
+                token.line += 1
+                token.column = 0 + 1
+
             transition = self.input_to_transition_table_key(read_char)
             self.current_state = self.table.get_state(self.current_state, transition)
 
