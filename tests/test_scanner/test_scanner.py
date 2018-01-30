@@ -36,7 +36,6 @@ class TestScanner(unittest.TestCase):
         self.assertEqual(s.sequence[1].token, constants.T_A_ID)
         self.assertEqual(s.sequence[2].token, constants.T_E_UNEXPECTED_CHAR)
         self.assertEqual(s.sequence[3].token, constants.T_R_INT)
-        self.assertEqual(s.sequence[4].token, constants.T_R_EOF)
 
     def test_T_A__INTEGER(self):
         self.input.write("0123 123 123.")
@@ -48,7 +47,6 @@ class TestScanner(unittest.TestCase):
         self.assertEqual(s.sequence[0].token, constants.T_E_LEADING_ZERO)
         self.assertEqual(s.sequence[1].token, constants.T_A_INTEGER)
         self.assertEqual(s.sequence[2].token, constants.T_E_FLOAT_FORMAT)
-        self.assertEqual(s.sequence[3].token, constants.T_R_EOF)
 
     def test_T_A_FLOAT(self):
         self.input.write("01.23 12.340 012.340 12.34e1 12.34e+1 12.34e-0100 12.34")
@@ -75,7 +73,6 @@ class TestScanner(unittest.TestCase):
         self.assertEqual(s.sequence[9].token, constants.T_E_LEADING_ZERO)
         # 12.34
         self.assertEqual(s.sequence[10].token, constants.T_A_FLOAT)
-        self.assertEqual(s.sequence[11].token, constants.T_R_EOF)
 
     def test_T_R_EQUALS_and_IS_EQUALS(self):
         self.input.write("= == === ====")
@@ -94,7 +91,6 @@ class TestScanner(unittest.TestCase):
         # ====
         self.assertEqual(s.sequence[4].token, constants.T_R_IS_EQUALS)
         self.assertEqual(s.sequence[5].token, constants.T_R_IS_EQUALS)
-        self.assertEqual(s.sequence[6].token, constants.T_R_EOF)
 
     def test_T_R_LESS_THAN_and_ambiguities(self):
         self.input.write("< <= <> <<>>")
@@ -113,7 +109,6 @@ class TestScanner(unittest.TestCase):
         self.assertEqual(s.sequence[3].token, constants.T_R_LESS_THAN)
         self.assertEqual(s.sequence[4].token, constants.T_R_LESS_THAN_OR_GREATER_THAN)
         self.assertEqual(s.sequence[5].token, constants.T_R_GREATER_THAN)
-        self.assertEqual(s.sequence[6].token, constants.T_R_EOF)
 
     def test_T_R_DIVIDE_and_comment_ambiguities(self):
         self.input.write("/ //asd/asd\n/*abcd/*abcd/*abcd*/\n/*abcd123")
@@ -130,7 +125,6 @@ class TestScanner(unittest.TestCase):
         self.assertEqual(s.sequence[2].token, constants.T_R_BLOCK_COMMENT)
         # /*abcd123
         self.assertEqual(s.sequence[3].token, constants.T_E_BLOCK_COMMENT_FORMAT)
-        self.assertEqual(s.sequence[4].token, constants.T_R_EOF)
 
     def test_T_R_COLON_ambiguities(self):
         self.input.write(": :: ::: ::::")
@@ -149,7 +143,6 @@ class TestScanner(unittest.TestCase):
         # ::::
         self.assertEqual(s.sequence[4].token, constants.T_R_DOUBLE_COLON)
         self.assertEqual(s.sequence[5].token, constants.T_R_DOUBLE_COLON)
-        self.assertEqual(s.sequence[6].token, constants.T_R_EOF)
 
     def test_reserved_identifiers(self):
         self.input.write("and not or if then else for class int float\n"
@@ -173,7 +166,6 @@ class TestScanner(unittest.TestCase):
         self.assertEqual(s.sequence[11].token, constants.T_R_PUT)
         self.assertEqual(s.sequence[12].token, constants.T_R_RETURN)
         self.assertEqual(s.sequence[13].token, constants.T_R_PROGRAM)
-        self.assertEqual(s.sequence[14].token, constants.T_R_EOF)
 
     def test_remaining_unambiguous_characters(self):
         self.input.write(",.+-*(){}[]")
@@ -193,7 +185,6 @@ class TestScanner(unittest.TestCase):
         self.assertEqual(s.sequence[8].token, constants.T_R_CLOSE_BRACE)
         self.assertEqual(s.sequence[9].token, constants.T_R_OPEN_BRACKET)
         self.assertEqual(s.sequence[10].token, constants.T_R_CLOSE_BRACKET)
-        self.assertEqual(s.sequence[11].token, constants.T_R_EOF)
 
     def test_T_R_GREATER_THAN_and_ambiguities(self):
         self.input.write("> >= >> ><")
@@ -212,7 +203,6 @@ class TestScanner(unittest.TestCase):
         # ><
         self.assertEqual(s.sequence[4].token, constants.T_R_GREATER_THAN)
         self.assertEqual(s.sequence[5].token, constants.T_R_LESS_THAN)
-        self.assertEqual(s.sequence[6].token, constants.T_R_EOF)
 
     def test_next_char(self):
         self.assertEqual(self.s.next_char(), 'i')

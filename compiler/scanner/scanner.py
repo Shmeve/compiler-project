@@ -152,7 +152,9 @@ class Scanner:
 
         while token.token is not constants.T_R_EOF:
             token = self.next_token()
-            self.sequence.append(token)
+
+            if token.token is not constants.T_R_EOF:
+                self.sequence.append(token)
 
     def log(self, to_file: bool=False) -> None:
         """
