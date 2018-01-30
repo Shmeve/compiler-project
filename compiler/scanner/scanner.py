@@ -173,7 +173,7 @@ class Scanner:
                         t.get_error_message(), t.line, t.column
                     ))
 
-                token_file.write(t.token+',')
+                token_file.write(t.token+' ')
 
                 print('{:s} {:s} {:d},{:d}'.format(t.token, t.lexeme, t.line, t.column))
 
