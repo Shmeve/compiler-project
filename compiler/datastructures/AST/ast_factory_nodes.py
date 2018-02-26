@@ -7,6 +7,7 @@ class Node(metaclass=abc.ABCMeta):
         self.leftmost_sibling = leftmost_sibling
         self.leftmost_child = leftmost_child
         self.right_sibling = right_sibling
+        self.item = None
 
     def make_siblings(self, new_sibling):
         """
@@ -52,18 +53,6 @@ class Node(metaclass=abc.ABCMeta):
             while child_ptr is not None:
                 child_ptr.parent = self
                 child_ptr = child_ptr.right_sibling
-
-    def make_family(self, parent, children: list):
-        # TODO: This isn't supposed to be in Node
-        """
-        Iterate through list of children and adopt each one.
-
-        :param parent: node adopting list of children
-        :param children: list of child nodes to be adopted
-        :return: None
-        """
-        for c in children:
-            parent.adopt_children(c)
 
 
 class ConcreteIntNumNode(Node):
