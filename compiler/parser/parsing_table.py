@@ -28,3 +28,15 @@ class ParsingTable:
         for row in self.json_data:
             key: str = row.pop(0)           # Pop string identifier (buffer)
             self.parse_table[key] = row     # Store remaining list under key
+
+    def get_rule(self, current: str, parse_input: str):
+        """
+        Get rule of current row given a specific input
+
+        :param current: string identifier of current row
+        :param parse_input: string identifier of the input to search for rule
+        :return: int (rule)
+        """
+        index: int = self.parse_table_inputs.index(parse_input)
+
+        return self.parse_table[current][index]

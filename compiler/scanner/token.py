@@ -5,10 +5,10 @@ from compiler.tools import error_messages as em
 
 class Token:
     def __init__(self, line: int=0, column: int=0, token: str="", lexeme: str=""):
-        self.line = line
-        self.column = column
-        self.token = token
-        self.lexeme = lexeme
+        self.line: int = line
+        self.column: int = column
+        self.token: str = token
+        self.lexeme: str = lexeme
 
     def is_error(self) -> bool:
         """

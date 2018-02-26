@@ -146,7 +146,7 @@ class Scanner:
 
         return input_char   # Read as is (special reserved character)
 
-    def scan_file(self) -> None:
+    def scan_file(self) -> list:
         """
         Main driver of the lexical analyzer. Scan file, convert to tokens and handel errors.
 
@@ -160,6 +160,8 @@ class Scanner:
 
             if token.token is not constants.T_R_EOF:
                 self.sequence.append(token)
+
+        return self.sequence
 
     def log(self, to_file: bool=False) -> None:
         """
