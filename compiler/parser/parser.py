@@ -62,8 +62,17 @@ class Parser:
                     print(rules[str(rule)])
                     self.inverse_rhs_multiple_push(rule)
                 else:
-                    self.skip_errors()
-                    self.error = True
+                    # Check if an epsilon rule exists within grammar that might be missing from table
+                    forced_epsilon_rule: str = self.check_for_epsilon_rule(x)
+
+                    # No epsilon rule
+                    if forced_epsilon_rule is "":
+                        self.skip_errors()
+                        self.error = True
+                    # Epsilon rule exists, skip non-terminal
+                    else:
+                        self.stack.pop()
+                        print(rules[forced_epsilon_rule])
 
         if t is not '$' or self.error:
             return False
@@ -71,7 +80,7 @@ class Parser:
             return True
 
     def skip_errors(self):
-        # TODO: Implement properly
+        # TODO: Implement error recovery
         self.stack.pop()
         return None
 
@@ -94,3 +103,16 @@ class Parser:
 
         for i in reversed(rhs):
             self.stack.push(i)
+
+    def check_for_epsilon_rule(self, key: str) -> str:
+        """
+        Search all rules for key->EPSILON rule that was missing from generated grammar table
+
+        :param key: non-terminal to search for epsilon production
+        :return: str
+        """
+        for k, v in predict_set.items():
+            if v["LHS"] is key and v["RHS"][0] is "EPSILON":
+                return k
+
+        return ""
