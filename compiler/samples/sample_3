@@ -1,0 +1,12 @@
+class InheritedUtility {
+  int member1;
+};
+
+class Utility : InheritedUtility {
+  int var1[4][5][7];
+};
+
+program {
+  int x;
+  float y;
+};

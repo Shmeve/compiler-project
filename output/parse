@@ -1,9 +1,38 @@
 prog → A B T_R_PROGRAM funcBody T_R_SEMI_COLON
+A → classDecl A
+classDecl → T_R_CLASS T_A_ID C T_R_OPEN_BRACE varOrFuncDeclHead T_R_CLOSE_BRACE T_R_SEMI_COLON
+C → EPSILON
+varOrFuncDeclHead → type T_A_ID varOrFuncDeclTail
+type → T_R_INT
+varOrFuncDeclTail → I varDeclTail varOrFuncDeclHead
+I → EPSILON
+varDeclTail → T_R_SEMI_COLON
+varOrFuncDeclHead → EPSILON
+A → classDecl A
+classDecl → T_R_CLASS T_A_ID C T_R_OPEN_BRACE varOrFuncDeclHead T_R_CLOSE_BRACE T_R_SEMI_COLON
+C → T_R_COLON T_A_ID D
+D → EPSILON
+varOrFuncDeclHead → type T_A_ID varOrFuncDeclTail
+type → T_R_INT
+varOrFuncDeclTail → I varDeclTail varOrFuncDeclHead
+I → arraySize I
+arraySize → T_R_OPEN_BRACKET T_A_INTEGER T_R_CLOSE_BRACKET
+I → arraySize I
+arraySize → T_R_OPEN_BRACKET T_A_INTEGER T_R_CLOSE_BRACKET
+I → arraySize I
+arraySize → T_R_OPEN_BRACKET T_A_INTEGER T_R_CLOSE_BRACKET
+I → EPSILON
+varDeclTail → T_R_SEMI_COLON
+varOrFuncDeclHead → EPSILON
 A → EPSILON
 B → EPSILON
 funcBody → T_R_OPEN_BRACE varDeclOnlyHead H T_R_CLOSE_BRACE
 varDeclOnlyHead → type T_A_ID I varDeclTail varDeclOnlyHead
 type → T_R_INT
+I → EPSILON
+varDeclTail → T_R_SEMI_COLON
+varDeclOnlyHead → type T_A_ID I varDeclTail varDeclOnlyHead
+type → T_R_FLOAT
 I → EPSILON
 varDeclTail → T_R_SEMI_COLON
 varDeclOnlyHead → EPSILON

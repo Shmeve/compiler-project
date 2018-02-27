@@ -17,7 +17,7 @@ Section: Winter 2018 - NN
 
 ## Running the Compiler
 `python main.py [source-file-path] [output-to-file-boolean]`
-
+	ex: `python main.py compiler/samples/sample_3 True`
 ## Testing Project
 This projects test suit can be run using [nose (installed via requirements.txt)](http://nose.readthedocs.io/en/latest/)
 1. `cd` to repository

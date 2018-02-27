@@ -11,16 +11,19 @@ else:
 
 token_sequence: list = s.scan_file()
 
+print("----------\nScanner\n----------")
 if args_len >= 3:
     s.log(sys.argv[2])
 else:
     s.log()
 
-print("\nParser")
+print("----------\nParser\n----------")
 p: Parser = Parser(token_sequence)
-print(p.parse())
+result: bool = p.parse()
 
 if args_len >= 3:
     p.log_results(sys.argv[2])
+    print('----------\n'+str(result))
 else:
     p.log_results()
+    print('----------\nResult: ' + str(result))
