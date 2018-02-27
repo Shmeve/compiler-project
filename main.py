@@ -19,3 +19,8 @@ else:
 print("\nParser")
 p: Parser = Parser(token_sequence)
 print(p.parse())
+
+if args_len >= 3:
+    p.log_results(sys.argv[2])
+else:
+    p.log_results()

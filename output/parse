@@ -1,0 +1,10 @@
+prog → A B T_R_PROGRAM funcBody T_R_SEMI_COLON
+A → EPSILON
+B → EPSILON
+funcBody → T_R_OPEN_BRACE varDeclOnlyHead H T_R_CLOSE_BRACE
+varDeclOnlyHead → type T_A_ID I varDeclTail varDeclOnlyHead
+type → T_R_INT
+I → EPSILON
+varDeclTail → T_R_SEMI_COLON
+varDeclOnlyHead → EPSILON
+H → EPSILON

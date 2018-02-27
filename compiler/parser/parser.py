@@ -23,6 +23,8 @@ class Parser:
         # Set up parse table
         self.parse_table.build_table()
 
+        self.output = []
+
     def parse(self) -> bool:
         """
         Parsing algorithm driver.
@@ -59,7 +61,7 @@ class Parser:
 
                 if rule is not 102 and rule is not 103:
                     self.stack.pop()
-                    print(rules[str(rule)])
+                    self.output.append(rules[str(rule)])
                     self.inverse_rhs_multiple_push(rule)
                 else:
                     # Check if an epsilon rule exists within grammar that might be missing from table
@@ -72,7 +74,7 @@ class Parser:
                     # Epsilon rule exists, skip non-terminal
                     else:
                         self.stack.pop()
-                        print(rules[forced_epsilon_rule])
+                        self.output.append(rules[forced_epsilon_rule])
 
         if t is not '$' or self.error:
             return False
@@ -116,3 +118,21 @@ class Parser:
                 return k
 
         return ""
+
+    def log_results(self, to_file: bool=False):
+        """
+        Log parser results, optionally file
+
+        :param to_file: flag if logging should write to file
+        :return: None
+        """
+        if to_file:
+            file = 'output/parse'
+
+            with open(file, 'w') as f:
+                for l in self.output:
+                    f.write(l+"\n")
+                    print(l)
+        else:
+            for l in self.output:
+                print(l)
