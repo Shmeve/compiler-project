@@ -8,6 +8,10 @@ class Node(metaclass=abc.ABCMeta):
         self.leftmost_child = leftmost_child
         self.right_sibling = right_sibling
         self.item = None
+        self.type: str = ""
+
+        if self.leftmost_sibling is None:
+            self.leftmost_sibling = self
 
     def make_siblings(self, new_sibling):
         """

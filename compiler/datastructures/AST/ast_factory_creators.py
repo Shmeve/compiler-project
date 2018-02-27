@@ -1,5 +1,6 @@
 import abc
 from compiler.datastructures.AST import ast_factory_nodes
+from compiler.datastructures.AST.ast_factory_nodes import Node
 
 
 class Creator(metaclass=abc.ABCMeta):
@@ -16,25 +17,22 @@ class Creator(metaclass=abc.ABCMeta):
     def adopt_children(self, new_child):
         self.node.adopt_children(new_child)
 
-    def make_family(self, parent, children: list):
-        self.node.make_family(parent, children)
-
 
 class ConcreteIntNumCreator(Creator):
-    def _make_node(self):
+    def _make_node(self) -> Node:
         return ast_factory_nodes.ConcreteIntNumNode()
 
 
 class ConcreteIdCreator(Creator):
-    def _make_node(self):
+    def _make_node(self) -> Node:
         return ast_factory_nodes.ConcreteIdNode()
 
 
 class ConcreteOpCreator(Creator):
-    def _make_node(self):
+    def _make_node(self) -> Node:
         return ast_factory_nodes.ConcreteOpNode()
 
 
 class ConcreteNullCreator(Creator):
-    def _make_node(self):
+    def _make_node(self) -> Node:
         return ast_factory_nodes.ConcreteNullNode()

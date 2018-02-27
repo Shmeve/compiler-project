@@ -29,7 +29,7 @@ class ParsingTable:
             key: str = row.pop(0)           # Pop string identifier (buffer)
             self.parse_table[key] = row     # Store remaining list under key
 
-    def get_rule(self, current: str, parse_input: str):
+    def get_rule(self, current: str, parse_input: str) -> int:
         """
         Get rule of current row given a specific input
 
