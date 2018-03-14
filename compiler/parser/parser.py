@@ -1,4 +1,6 @@
 from compiler.datastructures.stack import Stack
+from compiler.datastructures.linked_list import Node
+from compiler.datastructures.linked_list import LinkedList
 from compiler.scanner.token import Token
 from compiler.parser.parsing_table import ParsingTable
 from compiler.tools.parser.grammar_components import terminals as terminals
@@ -17,6 +19,7 @@ class Parser:
         self.token_sequence: list = token_sequence
         self.parse_table: ParsingTable = ParsingTable()
         self.error: bool = False
+        self.sentential: LinkedList = LinkedList()
 
         self.token_sequence.append(Token(0, 0, '$'))
 
@@ -33,6 +36,15 @@ class Parser:
         """
         end_token = Token(0, 0, '$')
         start_token = Token(0, 0, 'prog')
+
+        # Initialize Sentential Form
+        self.sentential.insert_after('prog')
+        # Add initial Sentential Form to output
+        d: dict = {
+            "rule": "",
+            "sentential": self.sentential.to_string()
+        }
+        self.output.append(d)
 
         self.stack.push(end_token.token)
         self.stack.push(start_token.token)
@@ -60,8 +72,39 @@ class Parser:
                 rule = self.parse_table.get_rule(x, t)
 
                 if rule is not 102 and rule is not 103:
+                    # Expand Sentential form
+                    lhs = predict_set[str(rule)]["LHS"]
+                    rhs = predict_set[str(rule)]["RHS"]
+
+                    if len(rhs) is 1 and rhs[0] is "EPSILON":
+                        # Remove LHS of production replace with nothing (EPSILON)
+                        self.sentential.remove_node(lhs)
+                    else:
+                        sentential_index = self.sentential.get_node(lhs)        # Find LHS within the current Sentential
+                        rhs_list = self.generate_linked_list_of_predict_rhs(rhs)  # Generate list of RHS to replace LHS
+
+                        # Find end of new list to add within Sentential form LinkedList
+                        tail: Node = rhs_list.head
+
+                        while tail.next_node is not None:
+                            tail = tail.next_node
+
+                        # Insert new linked list after the LHS element of the predict set already in the Sentential
+                        temp = sentential_index.next_node
+                        sentential_index.next_node = rhs_list.head
+                        tail.next_node = temp
+
+                        # Remove LHS element from the list; Completing the replacement
+                        self.sentential.remove_node(lhs)
+
+                    # Log Rule Used and new Sentential Form
+                    d: dict = {
+                        "rule": rules[str(rule)],
+                        "sentential": self.sentential.to_string()
+                    }
+
                     self.stack.pop()
-                    self.output.append(rules[str(rule)])
+                    self.output.append(d)
                     self.inverse_rhs_multiple_push(rule)
                 else:
                     # Check if an epsilon rule exists within grammar that might be missing from table
@@ -74,7 +117,14 @@ class Parser:
                     # Epsilon rule exists, skip non-terminal
                     else:
                         self.stack.pop()
-                        self.output.append(rules[forced_epsilon_rule])
+                        self.sentential.remove_node(predict_set[forced_epsilon_rule]["LHS"])
+
+                        # Log Rule Used and new Sentential Form
+                        d: dict = {
+                            "rule": rules[forced_epsilon_rule],
+                            "sentential": self.sentential.to_string()
+                        }
+                        self.output.append(d)
 
         if t is not '$' or self.error:
             return False
@@ -131,8 +181,27 @@ class Parser:
 
             with open(file, 'w') as f:
                 for l in self.output:
-                    f.write(l+"\n")
-                    print(l)
+                    f.write("Rule Used: " + l["rule"] +"\n")
+                    f.write("Sentential Form: " + l["sentential"] + "\n\n")
+                    print("Rule Used: " + l["rule"])
+                    print("Sentential Form: " + l["sentential"])
+                    print("\n")
         else:
             for l in self.output:
-                print(l)
+                print("Rule Used: " + l["rule"])
+                print("Sentential Form: " + l["sentential"])
+                print("\n")
+
+    def generate_linked_list_of_predict_rhs(self, rhs: list) -> LinkedList:
+        """
+        Create a linked list out of a predict set items RHS element
+
+        :param rhs: list of items in the RHS
+        :return: LinkedList
+        """
+        linked_list = LinkedList()
+
+        for i in rhs:
+            linked_list.insert_after(i)
+
+        return linked_list
