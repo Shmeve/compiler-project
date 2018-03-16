@@ -71,7 +71,7 @@ class Parser:
             else:
                 rule = self.parse_table.get_rule(x, t)
 
-                if rule is not 102 and rule is not 103:
+                if rule is not 105 and rule is not 106:
                     # Expand Sentential form
                     lhs = predict_set[str(rule)]["LHS"]
                     rhs = predict_set[str(rule)]["RHS"]

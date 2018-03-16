@@ -51,417 +51,425 @@ terminals = [
 ]
 
 rules = {
-    "1": "prog → A B T_R_PROGRAM funcBody T_R_SEMI_COLON",
-    "2": "A → classDecl A",
-    "3": "A → EPSILON",
-    "4": "B → funcDef B",
-    "5": "B → EPSILON",
-    "6": "classDecl → T_R_CLASS T_A_ID C T_R_OPEN_BRACE varOrFuncDeclHead T_R_CLOSE_BRACE T_R_SEMI_COLON",
-    "7": "varOrFuncDeclHead → type T_A_ID varOrFuncDeclTail",
-    "8": "varOrFuncDeclHead → EPSILON",
-    "9": "varOrFuncDeclTail → T_R_OPEN_PARENTHESIS funcDeclTail funcDeclOnly",
-    "10": "varOrFuncDeclTail → I varDeclTail varOrFuncDeclHead",
-    "11": "funcDeclOnly → type T_A_ID T_R_OPEN_PARENTHESIS funcDeclTail funcDeclOnly",
-    "12": "funcDeclOnly → EPSILON",
-    "13": "varDeclOnlyHead → type T_A_ID I varDeclTail varDeclOnlyHead",
-    "14": "varDeclOnlyHead → EPSILON",
-    "15": "C → T_R_COLON T_A_ID D",
-    "16": "C → EPSILON",
-    "17": "D → T_R_COMMA T_A_ID D",
-    "18": "D → EPSILON",
-    "19": "F → funcDecl F",
-    "20": "F → EPSILON",
-    "21": "funcDecl → type T_A_ID T_R_OPEN_PARENTHESIS fParams T_R_CLOSE_PARENTHESIS T_R_SEMI_COLON",
-    "22": "funcDeclTail → fParams T_R_CLOSE_PARENTHESIS T_R_SEMI_COLON",
-    "23": "funcHead → type G T_R_OPEN_PARENTHESIS fParams T_R_CLOSE_PARENTHESIS",
-    "24": "G → T_A_ID G`",
-    "25": "G` → T_R_DOUBLE_COLON T_A_ID",
-    "26": "G` → EPSILON",
-    "27": "funcDef → funcHead funcBody T_R_SEMI_COLON",
-    "28": "funcBody → T_R_OPEN_BRACE varDeclOnlyHead H T_R_CLOSE_BRACE",
-    "29": "H → statement H",
-    "30": "H → EPSILON",
-    "31": "varDeclTail → T_R_SEMI_COLON",
-    "32": "I → arraySize I",
-    "33": "I → EPSILON",
-    "34": "statement → T_R_FOR T_R_OPEN_PARENTHESIS type T_A_ID assignOp expr T_R_SEMI_COLON arithExpr relExpr T_R_SEMI_COLON assignStat T_R_CLOSE_PARENTHESIS statBlock T_R_SEMI_COLON",
-    "35": "statement → T_R_IF T_R_OPEN_PARENTHESIS expr T_R_CLOSE_PARENTHESIS T_R_THEN statBlock T_R_ELSE statBlock T_R_SEMI_COLON",
-    "36": "statement → T_R_GET T_R_OPEN_PARENTHESIS varFuncCallHeader T_R_CLOSE_PARENTHESIS T_R_SEMI_COLON",
-    "37": "statement → T_R_PUT T_R_OPEN_PARENTHESIS expr T_R_CLOSE_PARENTHESIS T_R_SEMI_COLON",
-    "38": "statement → T_R_RETURN T_R_OPEN_PARENTHESIS expr T_R_CLOSE_PARENTHESIS T_R_SEMI_COLON",
-    "39": "statement → assignStat T_R_SEMI_COLON",
-    "40": "assignStat → varFuncCallHeader assignOp expr",
-    "41": "statBlock → T_R_OPEN_BRACE H T_R_CLOSE_BRACE",
-    "42": "statBlock → statement",
-    "43": "statBlock → EPSILON",
-    "44": "expr → arithExpr isRelExpr",
-    "45": "isRelExpr → relExpr",
-    "46": "isRelExpr → EPSILON",
-    "47": "relExpr → relOp arithExpr",
-    "48": "arithExpr → term arithExpr`",
-    "49": "arithExpr` → addOp term arithExpr`",
-    "50": "arithExpr` → EPSILON",
-    "51": "sign → T_R_MINUS",
-    "52": "sign → T_R_PLUS",
-    "53": "term → factor term`",
-    "54": "term` → multOp factor term`",
-    "55": "term` → EPSILON",
-    "56": "factor → T_R_OPEN_PARENTHESIS arithExpr T_R_CLOSE_PARENTHESIS",
-    "57": "factor → T_A_FLOAT",
-    "58": "factor → T_A_INTEGER",
-    "59": "factor → T_R_NOT factor",
-    "60": "factor → varFuncCallHeader",
-    "61": "factor → sign factor",
-    "62": "varFuncCallHeader → T_A_ID J T_A_ID varFuncCallTail",
-    "63": "varFuncCallTail → variableTail",
-    "64": "varFuncCallTail → functionCallTail",
-    "65": "variableTail → K",
-    "66": "functionCallTail → T_R_OPEN_PARENTHESIS aParams T_R_CLOSE_PARENTHESIS",
-    "67": "J → T_R_OPEN_PARENTHESIS aParams T_R_CLOSE_PARENTHESIS T_R_DOT T_A_ID J",
-    "68": "J → K T_R_DOT T_A_ID J",
-    "69": "J → EPSILON",
-    "70": "K → indice K",
-    "71": "K → EPSILON",
-    "72": "idnestP → T_R_OPEN_PARENTHESIS aParams T_R_CLOSE_PARENTHESIS T_R_DOT T_A_ID",
-    "73": "idnestP → K T_R_DOT T_A_ID",
-    "74": "idnestP → EPSILON",
-    "75": "indice → T_R_OPEN_BRACKET arithExpr T_R_CLOSE_BRACKET",
-    "76": "arraySize → T_R_OPEN_BRACKET T_A_INTEGER T_R_CLOSE_BRACKET",
-    "77": "type → T_R_FLOAT",
-    "78": "type → T_R_INT",
-    "79": "fParams → type T_A_ID I L",
-    "80": "fParams → EPSILON",
-    "81": "L → fParamsTail L",
-    "82": "L → EPSILON",
-    "83": "aParams → expr M",
-    "84": "aParams → EPSILON",
-    "85": "M → aParamsTail M",
-    "86": "M → EPSILON",
-    "87": "fParamsTail → T_R_COMMA type T_A_ID I",
-    "88": "aParamsTail → T_R_COMMA expr",
-    "89": "assignOp → T_R_EQUALS",
-    "90": "relOp → T_R_GREATER_THAN",
-    "91": "relOp → T_R_GREATER_THAN_OR_EQUAL",
-    "92": "relOp → T_R_IS_EQUALS",
-    "93": "relOp → T_R_LESS_THAN",
-    "94": "relOp → T_R_LESS_THAN_OR_EQUAL",
-    "95": "relOp → T_R_LESS_THAN_OR_GREATER_THAN",
-    "96": "addOp → T_R_MINUS",
-    "97": "addOp → T_R_OR",
-    "98": "addOp → T_R_PLUS",
-    "99": "multOp → T_R_AND",
-    "100": "multOp → T_R_DIVIDE",
-    "101": "multOp → T_R_MULTIPLY",
-    "102": "POP",
-    "103": "SCAN"
+    "1": "prog → classDeclList funcDefList T_R_PROGRAM funcBody T_R_SEMI_COLON",
+    "2": "classDeclList → classDecl classDeclList",
+    "3": "classDeclList → EPSILON",
+    "4": "classDecl → T_R_CLASS T_A_ID classInherit T_R_OPEN_BRACE classBody T_R_CLOSE_BRACE T_R_SEMI_COLON",
+    "5": "classInherit → T_R_COLON T_A_ID classInheritTail",
+    "6": "classInherit → EPSILON",
+    "7": "classInheritTail → T_R_COMMA T_A_ID classInheritTail",
+    "8": "classInheritTail → EPSILON",
+    "9": "classBody → classProp classPropTail",
+    "10": "classBody → EPSILON",
+    "11": "classProp → type T_A_ID",
+    "12": "classPropTail → T_R_OPEN_PARENTHESIS fParams T_R_CLOSE_PARENTHESIS T_R_SEMI_COLON funcDecl",
+    "13": "classPropTail → arraySize T_R_SEMI_COLON classBody",
+    "14": "funcDecl → funcDeclTail funcDecl",
+    "15": "funcDecl → EPSILON",
+    "16": "funcDeclTail → type T_A_ID T_R_OPEN_PARENTHESIS fParams T_R_CLOSE_PARENTHESIS T_R_SEMI_COLON",
+    "17": "funcDefList → funcDef funcDefList",
+    "18": "funcDefList → EPSILON",
+    "19": "funcDef → funcHead funcBody T_R_SEMI_COLON",
+    "20": "funcHead → type T_A_ID funcScope T_R_OPEN_PARENTHESIS fParams T_R_CLOSE_PARENTHESIS",
+    "21": "funcScope → T_R_DOUBLE_COLON T_A_ID",
+    "22": "funcScope → EPSILON",
+    "23": "funcBody → T_R_OPEN_BRACE funcBodyInner T_R_CLOSE_BRACE",
+    "24": "funcBodyInner → T_A_ID funcBodyDecl",
+    "25": "funcBodyInner → primitiveType varDeclTail funcBodyInner",
+    "26": "funcBodyInner → construct funcBodyStat",
+    "27": "funcBodyInner → EPSILON",
+    "28": "funcBodyStat → statementList",
+    "29": "funcBodyDecl → variableCont assignOp expr T_R_SEMI_COLON funcBodyStat",
+    "30": "funcBodyDecl → varDeclTail funcBodyInner",
+    "31": "varDeclTail → T_A_ID arraySize T_R_SEMI_COLON",
+    "32": "construct → T_R_FOR T_R_OPEN_PARENTHESIS type T_A_ID assignOp expr T_R_SEMI_COLON relExpr T_R_SEMI_COLON assignStat T_R_CLOSE_PARENTHESIS statBlock T_R_SEMI_COLON",
+    "33": "construct → T_R_IF T_R_OPEN_PARENTHESIS expr T_R_CLOSE_PARENTHESIS T_R_THEN statBlock T_R_ELSE statBlock T_R_SEMI_COLON",
+    "34": "construct → T_R_GET T_R_OPEN_PARENTHESIS variable T_R_CLOSE_PARENTHESIS T_R_SEMI_COLON",
+    "35": "construct → T_R_PUT T_R_OPEN_PARENTHESIS expr T_R_CLOSE_PARENTHESIS T_R_SEMI_COLON",
+    "36": "construct → T_R_RETURN T_R_OPEN_PARENTHESIS expr T_R_CLOSE_PARENTHESIS T_R_SEMI_COLON",
+    "37": "statement → assignStat T_R_SEMI_COLON",
+    "38": "statement → construct",
+    "39": "statementList → statement statementList",
+    "40": "statementList → EPSILON",
+    "41": "assignStat → variable assignOp expr T_A_ID",
+    "42": "statBlock → T_R_OPEN_BRACE statementList T_R_CLOSE_BRACE",
+    "43": "statBlock → statement",
+    "44": "statBlock → EPSILON",
+    "45": "expr → arithExpr exprTail",
+    "46": "exprTail → relOp arithExpr",
+    "47": "exprTail → EPSILON",
+    "48": "relExpr → arithExpr relOp arithExpr",
+    "49": "arithExpr → term arithExprTail",
+    "50": "arithExprTail → addOp term arithExprTail",
+    "51": "arithExprTail → EPSILON",
+    "52": "sign → T_R_MINUS",
+    "53": "sign → T_R_PLUS",
+    "54": "term → factor termTail",
+    "55": "termTail → multOp factor termTail",
+    "56": "termTail → EPSILON",
+    "57": "factor → T_R_OPEN_PARENTHESIS arithExpr T_R_CLOSE_PARENTHESIS",
+    "58": "factor → T_A_FLOAT",
+    "59": "factor → T_A_INTEGER",
+    "60": "factor → T_R_NOT factor",
+    "61": "factor → varOrFunc",
+    "62": "factor → sign factor",
+    "63": "varOrFunc → T_A_ID varOrFuncEval T_A_IDnest",
+    "64": "varOrFuncEval → variableTail",
+    "65": "varOrFuncEval → functionCallTail",
+    "66": "variableTail → indice",
+    "67": "functionCallTail → T_R_OPEN_PARENTHESIS aParams T_R_CLOSE_PARENTHESIS",
+    "68": "T_A_IDnest → T_R_DOT varOrFunc",
+    "69": "T_A_IDnest → EPSILON",
+    "70": "variable → T_A_ID variableCont",
+    "71": "variableCont → variableTail variableCont2",
+    "72": "variableCont → functionCallTail functionCallTrap",
+    "73": "variableCont2 → T_R_DOT T_A_ID variableCont",
+    "74": "variableCont2 → EPSILON",
+    "75": "functionCallTrap → T_R_DOT T_A_ID variableCont",
+    "76": "indice → T_R_OPEN_BRACKET arithExpr T_R_CLOSE_BRACKET indice",
+    "77": "indice → EPSILON",
+    "78": "arraySize → T_R_OPEN_BRACKET T_A_INTEGER T_R_CLOSE_BRACKET arraySize",
+    "79": "arraySize → EPSILON",
+    "80": "type → T_A_ID",
+    "81": "type → primitiveType",
+    "82": "primitiveType → T_R_FLOAT",
+    "83": "primitiveType → T_R_INT",
+    "84": "fParams → type T_A_ID arraySize fParamsTail",
+    "85": "fParams → EPSILON",
+    "86": "aParams → expr aParamsTail",
+    "87": "aParams → EPSILON",
+    "88": "fParamsTail → T_R_COMMA type T_A_ID arraySize fParamsTail",
+    "89": "fParamsTail → EPSILON",
+    "90": "aParamsTail → T_R_COMMA expr aParamsTail",
+    "91": "aParamsTail → EPSILON",
+    "92": "assignOp → T_R_EQUALS",
+    "93": "relOp → T_R_GREATER_THAN",
+    "94": "relOp → T_R_GREATER_THAN_OR_EQUAL",
+    "95": "relOp → T_R_IS_EQUALS",
+    "96": "relOp → T_R_LESS_THAN",
+    "97": "relOp → T_R_LESS_THAN_OR_EQUAL",
+    "98": "relOp → T_R_LESS_THAN_OR_GREATER_THAN",
+    "99": "addOp → T_R_MINUS",
+    "100": "addOp → T_R_OR",
+    "101": "addOp → T_R_PLUS",
+    "102": "multOp → T_R_AND",
+    "103": "multOp → T_R_DIVIDE",
+    "104": "multOp → T_R_MULTIPLY",
+    "105": "POP",
+    "106": "SCAN"
 }
 
 predict_set = {
     "1": {
         "LHS": "prog",
-        "RHS": ["A", "B", "T_R_PROGRAM", "funcBody", "T_R_SEMI_COLON"]},
+        "RHS": ["classDeclList", "funcDefList", "T_R_PROGRAM", "funcBody", "T_R_SEMI_COLON"]},
     "2": {
-        "LHS": "A",
-        "RHS": ["classDecl", "A"]},
+        "LHS": "classDeclList",
+        "RHS": ["classDecl", "classDeclList"]},
     "3": {
-        "LHS": "A",
+        "LHS": "classDeclList",
         "RHS": ["EPSILON"]},
     "4": {
-        "LHS": "B",
-        "RHS": ["funcDef", "B"]},
-    "5": {
-        "LHS": "B",
-        "RHS": ["EPSILON"]},
-    "6": {
         "LHS": "classDecl",
-        "RHS": ["T_R_CLASS", "T_A_ID", "C", "T_R_OPEN_BRACE", "varOrFuncDeclHead", "T_R_CLOSE_BRACE",
-                "T_R_SEMI_COLON"]},
+        "RHS": ["T_R_CLASS", "T_A_ID", "classInherit", "T_R_OPEN_BRACE", "classBody", "T_R_CLOSE_BRACE", "T_R_SEMI_COLON"]},
+    "5": {
+        "LHS": "classInherit",
+        "RHS": ["T_R_COLON", "T_A_ID", "classInheritTail"]},
+    "6": {
+        "LHS": "classInherit",
+        "RHS": ["EPSILON"]},
     "7": {
-        "LHS": "varOrFuncDeclHead",
-        "RHS": ["type", "T_A_ID", "varOrFuncDeclTail"]},
+        "LHS": "classInheritTail",
+        "RHS": ["T_R_COMMA", "T_A_ID", "classInheritTail"]},
     "8": {
-        "LHS": "varOrFuncDeclHead",
+        "LHS": "classInheritTail",
         "RHS": ["EPSILON"]},
     "9": {
-        "LHS": "varOrFuncDeclTail",
-        "RHS": ["T_R_OPEN_PARENTHESIS", "funcDeclTail", "funcDeclOnly"]},
+        "LHS": "classBody",
+        "RHS": ["classProp", "classPropTail"]},
     "10": {
-        "LHS": "varOrFuncDeclTail",
-        "RHS": ["I", "varDeclTail", "varOrFuncDeclHead"]},
+        "LHS": "classBody",
+        "RHS": ["EPSILON"]},
     "11": {
-        "LHS": "funcDeclOnly",
-        "RHS": ["type", "T_A_ID", "T_R_OPEN_PARENTHESIS", "funcDeclTail", "funcDeclOnly"]},
+        "LHS": "classProp",
+        "RHS": ["type", "T_A_ID"]},
     "12": {
-        "LHS": "funcDeclOnly",
-        "RHS": ["EPSILON"]},
+        "LHS": "classPropTail",
+        "RHS": ["T_R_OPEN_PARENTHESIS", "fParams", "T_R_CLOSE_PARENTHESIS", "T_R_SEMI_COLON", "funcDecl"]},
     "13": {
-        "LHS": "varDeclOnlyHead",
-        "RHS": ["type", "T_A_ID", "I", "varDeclTail", "varDeclOnlyHead"]},
+        "LHS": "classPropTail",
+        "RHS": ["arraySize", "T_R_SEMI_COLON", "classBody"]},
     "14": {
-        "LHS": "varDeclOnlyHead",
-        "RHS": ["EPSILON"]},
+        "LHS": "funcDecl",
+        "RHS": ["funcDeclTail", "funcDecl"]},
     "15": {
-        "LHS": "C",
-        "RHS": ["T_R_COLON", "T_A_ID", "D"]},
-    "16": {
-        "LHS": "C",
+        "LHS": "funcDecl",
         "RHS": ["EPSILON"]},
+    "16": {
+        "LHS": "funcDeclTail",
+        "RHS": ["type", "T_A_ID", "T_R_OPEN_PARENTHESIS", "fParams", "T_R_CLOSE_PARENTHESIS", "T_R_SEMI_COLON"]},
     "17": {
-        "LHS": "D",
-        "RHS": ["T_R_COMMA", "T_A_ID", "D"]},
+        "LHS": "funcDefList",
+        "RHS": ["funcDef", "funcDefList"]},
     "18": {
-        "LHS": "D",
+        "LHS": "funcDefList",
         "RHS": ["EPSILON"]},
     "19": {
-        "LHS": "F",
-        "RHS": ["funcDecl", "F"]},
-    "20": {
-        "LHS": "F",
-        "RHS": ["EPSILON"]},
-    "21": {
-        "LHS": "funcDecl",
-        "RHS": ["type", "T_A_ID", "T_R_OPEN_PARENTHESIS", "fParams", "T_R_CLOSE_PARENTHESIS", "T_R_SEMI_COLON"]},
-    "22": {
-        "LHS": "funcDeclTail",
-        "RHS": ["fParams", "T_R_CLOSE_PARENTHESIS", "T_R_SEMI_COLON"]},
-    "23": {
-        "LHS": "funcHead",
-        "RHS": ["type", "G", "T_R_OPEN_PARENTHESIS", "fParams", "T_R_CLOSE_PARENTHESIS"]},
-    "24": {
-        "LHS": "G",
-        "RHS": ["T_A_ID", "G`"]},
-    "25": {
-        "LHS": "G`",
-        "RHS": ["T_R_DOUBLE_COLON", "T_A_ID"]},
-    "26": {
-        "LHS": "G`",
-        "RHS": ["EPSILON"]},
-    "27": {
         "LHS": "funcDef",
         "RHS": ["funcHead", "funcBody", "T_R_SEMI_COLON"]},
-    "28": {
-        "LHS": "funcBody",
-        "RHS": ["T_R_OPEN_BRACE", "varDeclOnlyHead", "H", "T_R_CLOSE_BRACE"]},
-    "29": {
-        "LHS": "H",
-        "RHS": ["statement", "H"]},
-    "30": {
-        "LHS": "H",
+    "20": {
+        "LHS": "funcHead",
+        "RHS": ["type", "T_A_ID", "funcScope", "T_R_OPEN_PARENTHESIS", "fParams", "T_R_CLOSE_PARENTHESIS"]},
+    "21": {
+        "LHS": "funcScope",
+        "RHS": ["T_R_DOUBLE_COLON", "T_A_ID"]},
+    "22": {
+        "LHS": "funcScope",
         "RHS": ["EPSILON"]},
+    "23": {
+        "LHS": "funcBody",
+        "RHS": ["T_R_OPEN_BRACE", "funcBodyInner", "T_R_CLOSE_BRACE"]},
+    "24": {
+        "LHS": "funcBodyInner",
+        "RHS": ["T_A_ID", "funcBodyDecl"]},
+    "25": {
+        "LHS": "funcBodyInner",
+        "RHS": ["primitiveType", "varDeclTail", "funcBodyInner"]},
+    "26": {
+        "LHS": "funcBodyInner",
+        "RHS": ["construct", "funcBodyStat"]},
+    "27": {
+        "LHS": "funcBodyInner",
+        "RHS": ["EPSILON"]},
+    "28": {
+        "LHS": "funcBodyStat",
+        "RHS": ["statementList"]},
+    "29": {
+        "LHS": "funcBodyDecl",
+        "RHS": ["variableCont", "assignOp", "expr", "T_R_SEMI_COLON", "funcBodyStat"]},
+    "30": {
+        "LHS": "funcBodyDecl",
+        "RHS": ["varDeclTail", "funcBodyInner"]},
     "31": {
         "LHS": "varDeclTail",
-        "RHS": ["T_R_SEMI_COLON"]},
+        "RHS": ["T_A_ID", "arraySize", "T_R_SEMI_COLON"]},
     "32": {
-        "LHS": "I",
-        "RHS": ["arraySize", "I"]},
+        "LHS": "construct",
+        "RHS": ["T_R_FOR", "T_R_OPEN_PARENTHESIS", "type", "T_A_ID", "assignOp", "expr", "T_R_SEMI_COLON", "relExpr", "T_R_SEMI_COLON", "assignStat", "T_R_CLOSE_PARENTHESIS", "statBlock", "T_R_SEMI_COLON"]},
     "33": {
-        "LHS": "I",
-        "RHS": ["EPSILON"]},
+        "LHS": "construct",
+        "RHS": ["T_R_IF", "T_R_OPEN_PARENTHESIS", "expr", "T_R_CLOSE_PARENTHESIS", "T_R_THEN", "statBlock", "T_R_ELSE", "statBlock", "T_R_SEMI_COLON"]},
     "34": {
-        "LHS": "statement",
-        "RHS": ["T_R_FOR", "T_R_OPEN_PARENTHESIS", "type", "T_A_ID", "assignOp", "expr", "T_R_SEMI_COLON", "arithExpr",
-                "relExpr", "T_R_SEMI_COLON", "assignStat", "T_R_CLOSE_PARENTHESIS", "statBlock", "T_R_SEMI_COLON"]},
+        "LHS": "construct",
+        "RHS": ["T_R_GET", "T_R_OPEN_PARENTHESIS", "variable", "T_R_CLOSE_PARENTHESIS", "T_R_SEMI_COLON"]},
     "35": {
-        "LHS": "statement",
-        "RHS": ["T_R_IF", "T_R_OPEN_PARENTHESIS", "expr", "T_R_CLOSE_PARENTHESIS", "T_R_THEN", "statBlock", "T_R_ELSE",
-                "statBlock", "T_R_SEMI_COLON"]},
+        "LHS": "construct",
+        "RHS": ["T_R_PUT", "T_R_OPEN_PARENTHESIS", "expr", "T_R_CLOSE_PARENTHESIS", "T_R_SEMI_COLON"]},
     "36": {
-        "LHS": "statement",
-        "RHS": ["T_R_GET", "T_R_OPEN_PARENTHESIS", "varFuncCallHeader", "T_R_CLOSE_PARENTHESIS", "T_R_SEMI_COLON"]},
+        "LHS": "construct",
+        "RHS": ["T_R_RETURN", "T_R_OPEN_PARENTHESIS", "expr", "T_R_CLOSE_PARENTHESIS", "T_R_SEMI_COLON"]},
     "37": {
         "LHS": "statement",
-        "RHS": ["T_R_PUT", "T_R_OPEN_PARENTHESIS", "expr", "T_R_CLOSE_PARENTHESIS", "T_R_SEMI_COLON"]},
+        "RHS": ["assignStat", "T_R_SEMI_COLON"]},
     "38": {
         "LHS": "statement",
-        "RHS": ["T_R_RETURN", "T_R_OPEN_PARENTHESIS", "expr", "T_R_CLOSE_PARENTHESIS", "T_R_SEMI_COLON"]},
+        "RHS": ["construct"]},
     "39": {
-        "LHS": "statement",
-        "RHS": ["assignStat", "T_R_SEMI_COLON"]},
+        "LHS": "statementList",
+        "RHS": ["statement", "statementList"]},
     "40": {
-        "LHS": "assignStat",
-        "RHS": ["varFuncCallHeader", "assignOp", "expr"]},
+        "LHS": "statementList",
+        "RHS": ["EPSILON"]},
     "41": {
-        "LHS": "statBlock",
-        "RHS": ["T_R_OPEN_BRACE", "H", "T_R_CLOSE_BRACE"]},
+        "LHS": "assignStat",
+        "RHS": ["variable", "assignOp", "expr", "T_A_ID"]},
     "42": {
         "LHS": "statBlock",
-        "RHS": ["statement"]},
+        "RHS": ["T_R_OPEN_BRACE", "statementList", "T_R_CLOSE_BRACE"]},
     "43": {
         "LHS": "statBlock",
-        "RHS": ["EPSILON"]},
+        "RHS": ["statement"]},
     "44": {
-        "LHS": "expr",
-        "RHS": ["arithExpr", "isRelExpr"]},
+        "LHS": "statBlock",
+        "RHS": ["EPSILON"]},
     "45": {
-        "LHS": "isRelExpr",
-        "RHS": ["relExpr"]},
+        "LHS": "expr",
+        "RHS": ["arithExpr", "exprTail"]},
     "46": {
-        "LHS": "isRelExpr",
-        "RHS": ["EPSILON"]},
-    "47": {
-        "LHS": "relExpr",
+        "LHS": "exprTail",
         "RHS": ["relOp", "arithExpr"]},
-    "48": {
-        "LHS": "arithExpr",
-        "RHS": ["term", "arithExpr`"]},
-    "49": {
-        "LHS": "arithExpr`",
-        "RHS": ["addOp", "term", "arithExpr`"]},
-    "50": {
-        "LHS": "arithExpr`",
+    "47": {
+        "LHS": "exprTail",
         "RHS": ["EPSILON"]},
+    "48": {
+        "LHS": "relExpr",
+        "RHS": ["arithExpr", "relOp", "arithExpr"]},
+    "49": {
+        "LHS": "arithExpr",
+        "RHS": ["term", "arithExprTail"]},
+    "50": {
+        "LHS": "arithExprTail",
+        "RHS": ["addOp", "term", "arithExprTail"]},
     "51": {
-        "LHS": "sign",
-        "RHS": ["T_R_MINUS"]},
+        "LHS": "arithExprTail",
+        "RHS": ["EPSILON"]},
     "52": {
         "LHS": "sign",
-        "RHS": ["T_R_PLUS"]},
+        "RHS": ["T_R_MINUS"]},
     "53": {
-        "LHS": "term",
-        "RHS": ["factor", "term`"]},
+        "LHS": "sign",
+        "RHS": ["T_R_PLUS"]},
     "54": {
-        "LHS": "term`",
-        "RHS": ["multOp", "factor", "term`"]},
+        "LHS": "term",
+        "RHS": ["factor", "termTail"]},
     "55": {
-        "LHS": "term`",
-        "RHS": ["EPSILON"]},
+        "LHS": "termTail",
+        "RHS": ["multOp", "factor", "termTail"]},
     "56": {
-        "LHS": "factor",
-        "RHS": ["T_R_OPEN_PARENTHESIS", "arithExpr", "T_R_CLOSE_PARENTHESIS"]},
+        "LHS": "termTail",
+        "RHS": ["EPSILON"]},
     "57": {
         "LHS": "factor",
-        "RHS": ["T_A_FLOAT"]},
+        "RHS": ["T_R_OPEN_PARENTHESIS", "arithExpr", "T_R_CLOSE_PARENTHESIS"]},
     "58": {
         "LHS": "factor",
-        "RHS": ["T_A_INTEGER"]},
+        "RHS": ["T_A_FLOAT"]},
     "59": {
         "LHS": "factor",
-        "RHS": ["T_R_NOT", "factor"]},
+        "RHS": ["T_A_INTEGER"]},
     "60": {
         "LHS": "factor",
-        "RHS": ["varFuncCallHeader"]},
+        "RHS": ["T_R_NOT", "factor"]},
     "61": {
         "LHS": "factor",
-        "RHS": ["sign", "factor"]},
+        "RHS": ["varOrFunc"]},
     "62": {
-        "LHS": "varFuncCallHeader",
-        "RHS": ["T_A_ID", "J", "T_A_ID", "varFuncCallTail"]},
+        "LHS": "factor",
+        "RHS": ["sign", "factor"]},
     "63": {
-        "LHS": "varFuncCallTail",
-        "RHS": ["variableTail"]},
+        "LHS": "varOrFunc",
+        "RHS": ["T_A_ID", "varOrFuncEval", "T_A_IDnest"]},
     "64": {
-        "LHS": "varFuncCallTail",
-        "RHS": ["functionCallTail"]},
+        "LHS": "varOrFuncEval",
+        "RHS": ["variableTail"]},
     "65": {
-        "LHS": "variableTail",
-        "RHS": ["K"]},
+        "LHS": "varOrFuncEval",
+        "RHS": ["functionCallTail"]},
     "66": {
+        "LHS": "variableTail",
+        "RHS": ["indice"]},
+    "67": {
         "LHS": "functionCallTail",
         "RHS": ["T_R_OPEN_PARENTHESIS", "aParams", "T_R_CLOSE_PARENTHESIS"]},
-    "67": {
-        "LHS": "J",
-        "RHS": ["T_R_OPEN_PARENTHESIS", "aParams", "T_R_CLOSE_PARENTHESIS", "T_R_DOT", "T_A_ID", "J"]},
     "68": {
-        "LHS": "J",
-        "RHS": ["K", "T_R_DOT", "T_A_ID", "J"]},
+        "LHS": "T_A_IDnest",
+        "RHS": ["T_R_DOT", "varOrFunc"]},
     "69": {
-        "LHS": "J",
+        "LHS": "T_A_IDnest",
         "RHS": ["EPSILON"]},
     "70": {
-        "LHS": "K",
-        "RHS": ["indice", "K"]},
+        "LHS": "variable",
+        "RHS": ["T_A_ID", "variableCont"]},
     "71": {
-        "LHS": "K",
-        "RHS": ["EPSILON"]},
+        "LHS": "variableCont",
+        "RHS": ["variableTail", "variableCont2"]},
     "72": {
-        "LHS": "idnestP",
-        "RHS": ["T_R_OPEN_PARENTHESIS", "aParams", "T_R_CLOSE_PARENTHESIS", "T_R_DOT", "T_A_ID"]},
+        "LHS": "variableCont",
+        "RHS": ["functionCallTail", "functionCallTrap"]},
     "73": {
-        "LHS": "idnestP",
-        "RHS": ["K", "T_R_DOT", "T_A_ID"]},
+        "LHS": "variableCont2",
+        "RHS": ["T_R_DOT", "T_A_ID", "variableCont"]},
     "74": {
-        "LHS": "idnestP",
+        "LHS": "variableCont2",
         "RHS": ["EPSILON"]},
     "75": {
-        "LHS": "indice",
-        "RHS": ["T_R_OPEN_BRACKET", "arithExpr", "T_R_CLOSE_BRACKET"]},
+        "LHS": "functionCallTrap",
+        "RHS": ["T_R_DOT", "T_A_ID", "variableCont"]},
     "76": {
-        "LHS": "arraySize",
-        "RHS": ["T_R_OPEN_BRACKET", "T_A_INTEGER", "T_R_CLOSE_BRACKET"]},
+        "LHS": "indice",
+        "RHS": ["T_R_OPEN_BRACKET", "arithExpr", "T_R_CLOSE_BRACKET", "indice"]},
     "77": {
-        "LHS": "type",
-        "RHS": ["T_R_FLOAT"]},
+        "LHS": "indice",
+        "RHS": ["EPSILON"]},
     "78": {
-        "LHS": "type",
-        "RHS": ["T_R_INT"]},
+        "LHS": "arraySize",
+        "RHS": ["T_R_OPEN_BRACKET", "T_A_INTEGER", "T_R_CLOSE_BRACKET", "arraySize"]},
     "79": {
-        "LHS": "fParams",
-        "RHS": ["type", "T_A_ID", "I", "L"]},
+        "LHS": "arraySize",
+        "RHS": ["EPSILON"]},
     "80": {
+        "LHS": "type",
+        "RHS": ["T_A_ID"]},
+    "81": {
+        "LHS": "type",
+        "RHS": ["primitiveType"]},
+    "82": {
+        "LHS": "primitiveType",
+        "RHS": ["T_R_FLOAT"]},
+    "83": {
+        "LHS": "primitiveType",
+        "RHS": ["T_R_INT"]},
+    "84": {
+        "LHS": "fParams",
+        "RHS": ["type", "T_A_ID", "arraySize", "fParamsTail"]},
+    "85": {
         "LHS": "fParams",
         "RHS": ["EPSILON"]},
-    "81": {
-        "LHS": "L",
-        "RHS": ["fParamsTail", "L"]},
-    "82": {
-        "LHS": "L",
-        "RHS": ["EPSILON"]},
-    "83": {
-        "LHS": "aParams",
-        "RHS": ["expr", "M"]},
-    "84": {
-        "LHS": "aParams",
-        "RHS": ["EPSILON"]},
-    "85": {
-        "LHS": "M",
-        "RHS": ["aParamsTail", "M"]},
     "86": {
-        "LHS": "M",
-        "RHS": ["EPSILON"]},
+        "LHS": "aParams",
+        "RHS": ["expr", "aParamsTail"]},
     "87": {
-        "LHS": "fParamsTail",
-        "RHS": ["T_R_COMMA", "type", "T_A_ID", "I"]},
+        "LHS": "aParams",
+        "RHS": ["EPSILON"]},
     "88": {
-        "LHS": "aParamsTail",
-        "RHS": ["T_R_COMMA", "expr"]},
+        "LHS": "fParamsTail",
+        "RHS": ["T_R_COMMA", "type", "T_A_ID", "arraySize", "fParamsTail"]},
     "89": {
+        "LHS": "fParamsTail",
+        "RHS": ["EPSILON"]},
+    "90": {
+        "LHS": "aParamsTail",
+        "RHS": ["T_R_COMMA", "expr", "aParamsTail"]},
+    "91": {
+        "LHS": "aParamsTail",
+        "RHS": ["EPSILON"]},
+    "92": {
         "LHS": "assignOp",
         "RHS": ["T_R_EQUALS"]},
-    "90": {
-        "LHS": "relOp",
-        "RHS": ["T_R_GREATER_THAN"]},
-    "91": {
-        "LHS": "relOp",
-        "RHS": ["T_R_GREATER_THAN_OR_EQUAL"]},
-    "92": {
-        "LHS": "relOp",
-        "RHS": ["T_R_IS_EQUALS"]},
     "93": {
         "LHS": "relOp",
-        "RHS": ["T_R_LESS_THAN"]},
+        "RHS": ["T_R_GREATER_THAN"]},
     "94": {
         "LHS": "relOp",
-        "RHS": ["T_R_LESS_THAN_OR_EQUAL"]},
+        "RHS": ["T_R_GREATER_THAN_OR_EQUAL"]},
     "95": {
         "LHS": "relOp",
-        "RHS": ["T_R_LESS_THAN_OR_GREATER_THAN"]},
+        "RHS": ["T_R_IS_EQUALS"]},
     "96": {
+        "LHS": "relOp",
+        "RHS": ["T_R_LESS_THAN"]},
+    "97": {
+        "LHS": "relOp",
+        "RHS": ["T_R_LESS_THAN_OR_EQUAL"]},
+    "98": {
+        "LHS": "relOp",
+        "RHS": ["T_R_LESS_THAN_OR_GREATER_THAN"]},
+    "99": {
         "LHS": "addOp",
         "RHS": ["T_R_MINUS"]},
-    "97": {
+    "100": {
         "LHS": "addOp",
         "RHS": ["T_R_OR"]},
-    "98": {
+    "101": {
         "LHS": "addOp",
         "RHS": ["T_R_PLUS"]},
-    "99": {
+    "102": {
         "LHS": "multOp",
         "RHS": ["T_R_AND"]},
-    "100": {
+    "103": {
         "LHS": "multOp",
         "RHS": ["T_R_DIVIDE"]},
-    "101": {
+    "104": {
         "LHS": "multOp",
-        "RHS": ["T_R_MULTIPLY"]
-    }
+        "RHS": ["T_R_MULTIPLY"]},
 }
