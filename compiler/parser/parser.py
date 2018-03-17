@@ -116,15 +116,54 @@ class Parser:
                         self.error = True
                     # Epsilon rule exists, skip non-terminal
                     else:
-                        self.stack.pop()
-                        self.sentential.remove_node(predict_set[forced_epsilon_rule]["LHS"])
+                        if predict_set[forced_epsilon_rule]["RHS"][0] is "EPSILON":
+                            self.stack.pop()
+                            self.sentential.remove_node(predict_set[forced_epsilon_rule]["LHS"])
 
-                        # Log Rule Used and new Sentential Form
-                        d: dict = {
-                            "rule": rules[forced_epsilon_rule],
-                            "sentential": self.sentential.to_string()
-                        }
-                        self.output.append(d)
+                            # Log Rule Used and new Sentential Form
+                            d: dict = {
+                                "rule": rules[forced_epsilon_rule],
+                                "sentential": self.sentential.to_string()
+                            }
+                            self.output.append(d)
+                        else:
+                            rule = forced_epsilon_rule
+                            # Expand Sentential form
+                            lhs = predict_set[str(rule)]["LHS"]
+                            rhs = predict_set[str(rule)]["RHS"]
+
+                            if len(rhs) is 1 and rhs[0] is "EPSILON":
+                                # Remove LHS of production replace with nothing (EPSILON)
+                                self.sentential.remove_node(lhs)
+                            else:
+                                sentential_index = self.sentential.get_node(
+                                    lhs)  # Find LHS within the current Sentential
+                                rhs_list = self.generate_linked_list_of_predict_rhs(
+                                    rhs)  # Generate list of RHS to replace LHS
+
+                                # Find end of new list to add within Sentential form LinkedList
+                                tail: Node = rhs_list.head
+
+                                while tail.next_node is not None:
+                                    tail = tail.next_node
+
+                                # Insert new linked list after the LHS element of the predict set already in the Sentential
+                                temp = sentential_index.next_node
+                                sentential_index.next_node = rhs_list.head
+                                tail.next_node = temp
+
+                                # Remove LHS element from the list; Completing the replacement
+                                self.sentential.remove_node(lhs)
+
+                            # Log Rule Used and new Sentential Form
+                            d: dict = {
+                                "rule": rules[str(rule)],
+                                "sentential": self.sentential.to_string()
+                            }
+
+                            self.stack.pop()
+                            self.output.append(d)
+                            self.inverse_rhs_multiple_push(rule)
 
         if t is not '$' or self.error:
             return False
@@ -166,6 +205,20 @@ class Parser:
         for k, v in predict_set.items():
             if v["LHS"] is key and v["RHS"][0] is "EPSILON":
                 return k
+
+        # Check key->[Single Element Productions] since they may also lead to EPSILON
+        for k, v in predict_set.items():
+            if v["LHS"] is key:
+                completed = True
+
+                for i in v["RHS"]:
+                    if self.check_for_epsilon_rule(i) is "":
+                        completed = False
+                        break
+                if completed:
+                    return k
+
+        # TODO: the single production found is not being pushed to stack
 
         return ""
 

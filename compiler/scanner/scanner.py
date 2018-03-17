@@ -5,7 +5,7 @@ from compiler.tools import constants
 
 
 class Scanner:
-    def __init__(self, source_file: str="compiler/samples/sample_3"):
+    def __init__(self, source_file: str="compiler/samples/sample_4"):
         """
         Default constructor, initializes token sequence and stores desired source file string.
 

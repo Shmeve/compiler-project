@@ -91,7 +91,7 @@ rules = {
     "38": "statement → construct",
     "39": "statementList → statement statementList",
     "40": "statementList → EPSILON",
-    "41": "assignStat → variable assignOp expr T_A_ID",
+    "41": "assignStat → variable assignOp expr",
     "42": "statBlock → T_R_OPEN_BRACE statementList T_R_CLOSE_BRACE",
     "43": "statBlock → statement",
     "44": "statBlock → EPSILON",
@@ -113,13 +113,13 @@ rules = {
     "60": "factor → T_R_NOT factor",
     "61": "factor → varOrFunc",
     "62": "factor → sign factor",
-    "63": "varOrFunc → T_A_ID varOrFuncEval T_A_IDnest",
+    "63": "varOrFunc → T_A_ID varOrFuncEval idnest",
     "64": "varOrFuncEval → variableTail",
     "65": "varOrFuncEval → functionCallTail",
     "66": "variableTail → indice",
     "67": "functionCallTail → T_R_OPEN_PARENTHESIS aParams T_R_CLOSE_PARENTHESIS",
-    "68": "T_A_IDnest → T_R_DOT varOrFunc",
-    "69": "T_A_IDnest → EPSILON",
+    "68": "idnest → T_R_DOT varOrFunc",
+    "69": "idnest → EPSILON",
     "70": "variable → T_A_ID variableCont",
     "71": "variableCont → variableTail variableCont2",
     "72": "variableCont → functionCallTail functionCallTrap",
@@ -282,7 +282,7 @@ predict_set = {
         "RHS": ["EPSILON"]},
     "41": {
         "LHS": "assignStat",
-        "RHS": ["variable", "assignOp", "expr", "T_A_ID"]},
+        "RHS": ["variable", "assignOp", "expr"]},
     "42": {
         "LHS": "statBlock",
         "RHS": ["T_R_OPEN_BRACE", "statementList", "T_R_CLOSE_BRACE"]},
@@ -348,7 +348,7 @@ predict_set = {
         "RHS": ["sign", "factor"]},
     "63": {
         "LHS": "varOrFunc",
-        "RHS": ["T_A_ID", "varOrFuncEval", "T_A_IDnest"]},
+        "RHS": ["T_A_ID", "varOrFuncEval", "idnest"]},
     "64": {
         "LHS": "varOrFuncEval",
         "RHS": ["variableTail"]},
@@ -362,10 +362,10 @@ predict_set = {
         "LHS": "functionCallTail",
         "RHS": ["T_R_OPEN_PARENTHESIS", "aParams", "T_R_CLOSE_PARENTHESIS"]},
     "68": {
-        "LHS": "T_A_IDnest",
+        "LHS": "idnest",
         "RHS": ["T_R_DOT", "varOrFunc"]},
     "69": {
-        "LHS": "T_A_IDnest",
+        "LHS": "idnest",
         "RHS": ["EPSILON"]},
     "70": {
         "LHS": "variable",
