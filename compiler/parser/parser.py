@@ -283,7 +283,9 @@ class Parser:
         linked_list = LinkedList()
 
         for i in rhs:
-            linked_list.insert_after(i)
+            # Skip semantic actions (@prog, @4,1, etc)
+            if i[0] is not "@":
+                linked_list.insert_after(i)
 
         return linked_list
 
