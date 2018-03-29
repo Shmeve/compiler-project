@@ -1,11 +1,14 @@
 from compiler.datastructures.stack import Stack
-from compiler.datastructures.linked_list import Node
+from compiler.datastructures.linked_list import LinkedListNode
 from compiler.datastructures.linked_list import LinkedList
 from compiler.scanner.token import Token
 from compiler.parser.parsing_table import ParsingTable
 from compiler.tools.parser.grammar_components import terminals as terminals
 from compiler.tools.parser.grammar_components import predict_set as predict_set
 from compiler.tools.parser.grammar_components import rules as rules
+from compiler.datastructures.AST import ast_factory_creators as fc
+from compiler.datastructures.AST import ast_factory_nodes as fn
+from compiler.datastructures.AST.abstract_syntax_tree import AbstractSyntaxTree
 
 
 class Parser:
@@ -15,7 +18,10 @@ class Parser:
 
         :param token_sequence: Sequence of Tokens produced by the Scanner to be parsed
         """
-        self.stack: Stack = Stack()
+        self.ast = AbstractSyntaxTree()
+        self.ast_root: fn.Node = None
+        self.parse_stack: Stack = Stack()
+        self.semantic_stack: list = []
         self.token_sequence: list = token_sequence
         self.parse_table: ParsingTable = ParsingTable()
         self.error: bool = False
@@ -46,30 +52,52 @@ class Parser:
         }
         self.output.append(d)
 
-        self.stack.push(end_token.token)
-        self.stack.push(start_token.token)
+        self.parse_stack.push(end_token.token)
+        self.parse_stack.push(start_token.token)
 
-        t: str = self.next_token().token
+        t: Token = self.next_token()
 
-        while self.stack.top() is not end_token.token:
-            x = self.stack.top()
+        while self.parse_stack.top() is not end_token.token:
+            x = self.parse_stack.top()
 
+            # Semantic action found
+            if x[0] is "@":
+                if x[1].isdigit():
+                    # Build AST
+                    ast_build_instructions: str = x[1:].split(',')
+                    semantic_stack_pop_count = int(ast_build_instructions[0])
+                    ast_parent_index = int(ast_build_instructions[1])-1
+                    nodes = []
+
+                    for i in range(0, semantic_stack_pop_count):
+                        nodes.append(self.semantic_stack.pop())
+
+                    nodes.reverse()
+                    parent: fn.Node = nodes.pop(ast_parent_index)
+                    subtree: fn.Node = self.ast.make_family(parent, nodes)
+                    self.semantic_stack.append(subtree)
+                    self.parse_stack.pop()
+                else:
+                    # Push to Semantic Stack
+                    node_type: str = x[1:]                                    # Remove @ lead symbol for semantic action
+                    self.semantic_stack.append(self.node_of_type(node_type))  # Create and push right node type
+                    self.parse_stack.pop()                                    # Parse next element
             # Current element is a terminal
-            if x in terminals:
+            elif x in terminals:
                 # Expected terminal
-                if x is t:
-                    self.stack.pop()
-                    t = self.next_token().token
+                if x is t.token:
+                    self.parse_stack.pop()
+                    t = self.next_token()
                 # Unexpected terminal
                 else:
                     self.skip_errors()
                     self.error = True
             # Skip EPSILONs
             elif x is "EPSILON":
-                self.stack.pop()
+                self.parse_stack.pop()
             # Current element is a non-terminal
             else:
-                rule = self.parse_table.get_rule(x, t)
+                rule = self.parse_table.get_rule(x, t.token)
 
                 if rule is not 105 and rule is not 106:
                     # Expand Sentential form
@@ -84,7 +112,7 @@ class Parser:
                         rhs_list = self.generate_linked_list_of_predict_rhs(rhs)  # Generate list of RHS to replace LHS
 
                         # Find end of new list to add within Sentential form LinkedList
-                        tail: Node = rhs_list.head
+                        tail: LinkedListNode = rhs_list.head
 
                         while tail.next_node is not None:
                             tail = tail.next_node
@@ -103,7 +131,7 @@ class Parser:
                         "sentential": self.sentential.to_string()
                     }
 
-                    self.stack.pop()
+                    self.parse_stack.pop()
                     self.output.append(d)
                     self.inverse_rhs_multiple_push(rule)
                 else:
@@ -117,7 +145,7 @@ class Parser:
                     # Epsilon rule exists, skip non-terminal
                     else:
                         if predict_set[forced_epsilon_rule]["RHS"][0] is "EPSILON":
-                            self.stack.pop()
+                            self.parse_stack.pop()
                             self.sentential.remove_node(predict_set[forced_epsilon_rule]["LHS"])
 
                             # Log Rule Used and new Sentential Form
@@ -142,7 +170,7 @@ class Parser:
                                     rhs)  # Generate list of RHS to replace LHS
 
                                 # Find end of new list to add within Sentential form LinkedList
-                                tail: Node = rhs_list.head
+                                tail: LinkedListNode = rhs_list.head
 
                                 while tail.next_node is not None:
                                     tail = tail.next_node
@@ -161,18 +189,18 @@ class Parser:
                                 "sentential": self.sentential.to_string()
                             }
 
-                            self.stack.pop()
+                            self.parse_stack.pop()
                             self.output.append(d)
                             self.inverse_rhs_multiple_push(rule)
 
-        if t is not '$' or self.error:
+        if t.token is not '$' or self.error:
             return False
         else:
             return True
 
     def skip_errors(self):
         # TODO: Implement error recovery
-        self.stack.pop()
+        self.parse_stack.pop()
         return None
 
     def next_token(self) -> Token:
@@ -193,7 +221,7 @@ class Parser:
         rhs: list = predict_set[str(rule)]["RHS"]
 
         for i in reversed(rhs):
-            self.stack.push(i)
+            self.parse_stack.push(i)
 
     def check_for_epsilon_rule(self, key: str) -> str:
         """
@@ -258,3 +286,105 @@ class Parser:
             linked_list.insert_after(i)
 
         return linked_list
+
+    def node_of_type(self, node_type: str) -> fn.Node:
+        if node_type == "prog":
+            node = fc.ProgNodeCreator().node
+            return node
+        elif node_type == "classList":
+            node = fc.ClassListNodeCreator().node
+            return node
+        elif node_type == "funcDefList":
+            node = fc.FuncDefListNodeCreator().node
+            return node
+        elif node_type == "statBlock":
+            node = fc.StatBlockNodeCreator().node
+            return node
+        elif node_type == "classDecl":
+            node = fc.ClassDeclNodeCreator().node
+            return node
+        elif node_type == "funcDef":
+            node = fc.FuncDefNodeCreator().node
+            return node
+        elif node_type == "id":
+            node = fc.IdNodeCreator().node
+            return node
+        elif node_type == "type":
+            node = fc.TypeNodeCreator().node
+            return node
+        elif node_type == "inherList":
+            node = fc.InherListNodeCreator().node
+            return node
+        elif node_type == "membList":
+            node = fc.MembListNodeCreator().node
+            return node
+        elif node_type == "funcDecl":
+            node = fc.FuncDeclNodeCreator().node
+            return node
+        elif node_type == "fparam":
+            node = fc.FparamNodeCreator().node
+            return node
+        elif node_type == "varDecl":
+            node = fc.VarDeclNodeCreator().node
+            return node
+        elif node_type == "fparamList":
+            node = fc.FparamListNodeCreator().node
+            return node
+        elif node_type == "dimList":
+            node = fc.DimListNodeCreator().node
+            return node
+        elif node_type == "num":
+            node = fc.NumNodeCreator().node
+            return node
+        elif node_type == "ifStat":
+            node = fc.IfStatNodeCreator().node
+            return node
+        elif node_type == "assignStat":
+            node = fc.AssignStatNodeCreator().node
+            return node
+        elif node_type == "forStat":
+            node = fc.ForStatNodeCreator().node
+            return node
+        elif node_type == "getStat":
+            node = fc.GetStatNodeCreator().node
+            return node
+        elif node_type == "putStat":
+            node = fc.PutStatNodeCreator().node
+            return node
+        elif node_type == "returnStat":
+            node = fc.ReturnStatNodeCreator().node
+            return node
+        elif node_type == "addOp":
+            node = fc.AddOpNodeCreator().node
+            return node
+        elif node_type == "relExpr":
+            node = fc.RelExprNodeCreator().node
+            return node
+        elif node_type == "relOp":
+            node = fc.RelOpNodeCreator().node
+            return node
+        elif node_type == "multOp":
+            node = fc.MultOpNodeCreator().node
+            return node
+        elif node_type == "not":
+            node = fc.NotNodeCreator().node
+            return node
+        elif node_type == "sign":
+            node = fc.SignNodeCreator().node
+            return node
+        elif node_type == "var":
+            node = fc.VarNodeCreator().node
+            return node
+        elif node_type == "dataMember":
+            node = fc.DataMemberNodeCreator().node
+            return node
+        elif node_type == "fCall":
+            node = fc.FCallNodeCreator().node
+            return node
+        elif node_type == "indexList":
+            node = fc.IndexListNodeCreator().node
+            return node
+        elif node_type == "aParams":
+            node = fc.AParamsNodeCreator().node
+            return node
+        pass

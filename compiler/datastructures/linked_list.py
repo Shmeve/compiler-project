@@ -1,19 +1,19 @@
-class Node:
+class LinkedListNode:
     def __init__(self, token="", next_node=None):
         self.token: str = token
-        self.next_node: Node = next_node
+        self.next_node: LinkedListNode = next_node
 
 
 class LinkedList:
     def __init__(self, head=None):
-        self.head: Node = head
+        self.head: LinkedListNode = head
 
     def insert_after(self, item: str, after_node: str=None) -> None:
-        pointer: Node = self.head
+        pointer: LinkedListNode = self.head
         insert_at_tail: bool = (after_node is None)
 
         if pointer is None:
-            self.head = Node(item)
+            self.head = LinkedListNode(item)
             pointer = self.head
         else:
             if insert_at_tail:
@@ -24,13 +24,13 @@ class LinkedList:
                     pointer = pointer.next_node
 
             temp = pointer.next_node
-            pointer.next_node = Node(item, temp)
+            pointer.next_node = LinkedListNode(item, temp)
 
         return None
 
     def remove_node(self, item):
-        pointer: Node = self.head
-        previous: Node = None
+        pointer: LinkedListNode = self.head
+        previous: LinkedListNode = None
 
         while pointer.token is not item:
             if pointer.next_node is None:
@@ -47,7 +47,7 @@ class LinkedList:
             previous.next_node = pointer.next_node
 
     def to_string(self) -> str:
-        pointer: Node = self.head
+        pointer: LinkedListNode = self.head
         string: str = pointer.token
 
         while pointer.next_node is not None:
@@ -56,8 +56,8 @@ class LinkedList:
 
         return string
 
-    def get_node(self, item) -> Node:
-        pointer: Node = self.head
+    def get_node(self, item) -> LinkedListNode:
+        pointer: LinkedListNode = self.head
 
         while pointer.token is not item:
             pointer = pointer.next_node

@@ -162,10 +162,10 @@ rules = {
 predict_set = {
     "1": {
         "LHS": "prog",
-        "RHS": ["classDeclList", "funcDefList", "T_R_PROGRAM", "funcBody", "T_R_SEMI_COLON"]},
+        "RHS": ["@prog", "@classList", "classDeclList", "@funcDefList", "funcDefList", "T_R_PROGRAM", "funcBody", "@4,1", "T_R_SEMI_COLON"]},
     "2": {
         "LHS": "classDeclList",
-        "RHS": ["classDecl", "classDeclList"]},
+        "RHS": ["@classDecl", "classDecl", "@2,1", "classDeclList"]},
     "3": {
         "LHS": "classDeclList",
         "RHS": ["EPSILON"]},
@@ -228,7 +228,7 @@ predict_set = {
         "RHS": ["EPSILON"]},
     "23": {
         "LHS": "funcBody",
-        "RHS": ["T_R_OPEN_BRACE", "funcBodyInner", "T_R_CLOSE_BRACE"]},
+        "RHS": ["T_R_OPEN_BRACE", "@statBlock", "funcBodyInner", "T_R_CLOSE_BRACE"]},
     "24": {
         "LHS": "funcBodyInner",
         "RHS": ["T_A_ID", "funcBodyDecl"]},

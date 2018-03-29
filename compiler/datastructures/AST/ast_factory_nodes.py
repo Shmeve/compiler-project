@@ -9,7 +9,7 @@ class Node(metaclass=abc.ABCMeta):
         self.leftmost_child: Node = leftmost_child
         self.right_sibling: Node = right_sibling
         self.item: Token = item
-        self.type: str = type
+        self.node_type: str = type
 
         if self.leftmost_sibling is None:
             self.leftmost_sibling = self
@@ -66,170 +66,170 @@ class Node(metaclass=abc.ABCMeta):
 
 class ConcreteNullNode(Node):
     def build(self):
-        self.type = "ConcreteNull"
+        self.node_type = "ConcreteNull"
 
 
 # New things
 class ProgNode(Node):
     def build(self):
-        self.type = "prog"
+        self.node_type = "prog"
 
 
 class ClassListNode(Node):
     def build(self):
-        self.type = "classList"
+        self.node_type = "classList"
 
 
 class FuncDefListNode(Node):
     def build(self):
-        self.type = "funcDefList"
+        self.node_type = "funcDefList"
 
 
 class StatBlockNode(Node):
     def build(self):
-        self.type = "statBlock"
+        self.node_type = "statBlock"
 
 
 class ClassDeclNode(Node):
     def build(self):
-        self.type = "classDecl"
+        self.node_type = "classDecl"
 
 
 class FuncDefNode(Node):
     def build(self):
-        self.type = "funcDef"
+        self.node_type = "funcDef"
 
 
 class IdNode(Node):
     def build(self):
-        self.type = "id"
+        self.node_type = "id"
 
 
 class TypeNode(Node):
     def build(self):
-        self.type = "type"
+        self.node_type = "type"
 
 
 class InherListNode(Node):
     def build(self):
-        self.type = "inherList"
+        self.node_type = "inherList"
 
 
 class MembListNode(Node):
     def build(self):
-        self.type = "membList"
+        self.node_type = "membList"
 
 
 class FuncDeclNode(Node):
     def build(self):
-        self.type = "funcDecl"
+        self.node_type = "funcDecl"
 
 
 class FparamNode(Node):
     def build(self):
-        self.type = "fparam"
+        self.node_type = "fparam"
 
 
 class VarDeclNode(Node):
     def build(self):
-        self.type = "varDecl"
+        self.node_type = "varDecl"
 
 
 class FparamListNode(Node):
     def build(self):
-        self.type = "fparamList"
+        self.node_type = "fparamList"
 
 
 class DimListNode(Node):
     def build(self):
-        self.type = "dimList"
+        self.node_type = "dimList"
 
 
 class NumNode(Node):
     def build(self):
-        self.type = "num"
+        self.node_type = "num"
 
 
 class IfStatNode(Node):
     def build(self):
-        self.type = "ifStat"
+        self.node_type = "ifStat"
 
 
 class AssignStatNode(Node):
     def build(self):
-        self.type = "assignStat"
+        self.node_type = "assignStat"
 
 
 class ForStatNode(Node):
     def build(self):
-        self.type = "forStat"
+        self.node_type = "forStat"
 
 
 class GetStatNode(Node):
     def build(self):
-        self.type = "getStat"
+        self.node_type = "getStat"
 
 
 class PutStatNode(Node):
     def build(self):
-        self.type = "putStat"
+        self.node_type = "putStat"
 
 
 class ReturnStatNode(Node):
     def build(self):
-        self.type = "returnStat"
+        self.node_type = "returnStat"
 
 
 class AddOpNode(Node):
     def build(self):
-        self.type = "addOp"
+        self.node_type = "addOp"
 
 
 class RelExprNode(Node):
     def build(self):
-        self.type = "relExpr"
+        self.node_type = "relExpr"
 
 
 class RelOpNode(Node):
     def build(self):
-        self.type = "relOp"
+        self.node_type = "relOp"
 
 
 class MultOpNode(Node):
     def build(self):
-        self.type = "multOp"
+        self.node_type = "multOp"
 
 
 class NotNode(Node):
     def build(self):
-        self.type = "not"
+        self.node_type = "not"
 
 
 class SignNode(Node):
     def build(self):
-        self.type = "sign"
+        self.node_type = "sign"
 
 
 class VarNode(Node):
     def build(self):
-        self.type = "var"
+        self.node_type = "var"
 
 
 class DataMemberNode(Node):
     def build(self):
-        self.type = "dataMember"
+        self.node_type = "dataMember"
 
 
 class FCallNode(Node):
     def build(self):
-        self.type = "fCall"
+        self.node_type = "fCall"
 
 
 class IndexListNode(Node):
     def build(self):
-        self.type = "indexList"
+        self.node_type = "indexList"
 
 
 class AParamsNode(Node):
     def build(self):
-        self.type = "aParams"
+        self.node_type = "aParams"
