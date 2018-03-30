@@ -231,10 +231,10 @@ predict_set = {
         "RHS": ["T_R_OPEN_BRACE", "@statBlock", "funcBodyInner", "T_R_CLOSE_BRACE"]},
     "24": {
         "LHS": "funcBodyInner",
-        "RHS": ["T_A_ID", "funcBodyDecl"]},
+        "RHS": ["@varDecl", "@type", "T_A_ID", "funcBodyDecl"]},
     "25": {
         "LHS": "funcBodyInner",
-        "RHS": ["primitiveType", "varDeclTail", "funcBodyInner"]},
+        "RHS": ["@varDecl", "@type", "primitiveType", "varDeclTail", "funcBodyInner"]},
     "26": {
         "LHS": "funcBodyInner",
         "RHS": ["construct", "funcBodyStat"]},
@@ -252,7 +252,7 @@ predict_set = {
         "RHS": ["varDeclTail", "funcBodyInner"]},
     "31": {
         "LHS": "varDeclTail",
-        "RHS": ["T_A_ID", "arraySize", "T_R_SEMI_COLON"]},
+        "RHS": ["@id", "T_A_ID", "@dimList", "arraySize", "@4,1", "@2,1", "T_R_SEMI_COLON"]},
     "32": {
         "LHS": "construct",
         "RHS": ["T_R_FOR", "T_R_OPEN_PARENTHESIS", "type", "T_A_ID", "assignOp", "expr", "T_R_SEMI_COLON", "relExpr", "T_R_SEMI_COLON", "assignStat", "T_R_CLOSE_PARENTHESIS", "statBlock", "T_R_SEMI_COLON"]},

@@ -9,6 +9,8 @@ from compiler.tools.parser.grammar_components import rules as rules
 from compiler.datastructures.AST import ast_factory_creators as fc
 from compiler.datastructures.AST import ast_factory_nodes as fn
 from compiler.datastructures.AST.abstract_syntax_tree import AbstractSyntaxTree
+from compiler.datastructures.graphvis_node import GraphvizNode
+from graphviz import Digraph
 
 
 class Parser:
@@ -192,6 +194,10 @@ class Parser:
                             self.parse_stack.pop()
                             self.output.append(d)
                             self.inverse_rhs_multiple_push(rule)
+
+        # TODO: Traverse tree
+        root: fn.Node = self.semantic_stack.pop()
+        self.visualize_ast(root, 'output/ast.gv.pdf')
 
         if t.token is not '$' or self.error:
             return False
@@ -390,3 +396,48 @@ class Parser:
             node = fc.AParamsNodeCreator().node
             return node
         pass
+
+    def visualize_ast(self, root: fn.Node, output_file: str) -> None:
+        count: int = 0
+        nodes_to_expand_remaining: bool = True
+        pointer: fn.Node = root
+        search_queue: list = []
+
+        # Initialize Graphviz with root node
+        dot = Digraph()
+        dot.node(str(count), root.node_type)
+        parent_id = str(count)
+
+        while nodes_to_expand_remaining:
+            pointer = pointer.leftmost_child
+            count += 1
+            search_queue.append(GraphvizNode(pointer, str(count)))
+
+            dot.node(str(count), pointer.node_type)
+            dot.edge(parent_id, str(count))
+
+            # Link all siblings
+            while pointer.right_sibling is not None:
+                pointer = pointer.right_sibling
+                count += 1
+                search_queue.append(GraphvizNode(pointer, str(count)))
+
+                dot.node(str(count), pointer.node_type)
+                dot.edge(parent_id, str(count))
+
+            while True:
+                if len(search_queue) is 0:
+                    nodes_to_expand_remaining = False
+                    break
+
+                next: GraphvizNode = search_queue.pop(0)
+
+                if next.node.leftmost_child is not None:
+                    parent_id = next.display_id
+                    pointer = next.node
+                    nodes_to_expand_remaining = True
+                    break
+                else:
+                    nodes_to_expand_remaining = False
+
+        dot.render(output_file, view=True)
