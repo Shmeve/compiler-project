@@ -6,6 +6,7 @@ Section: Winter 2018 - NN
 ## Prerequisites
 - Python 3
 - pip
+- Graphviz (https://graphviz.gitlab.io/download/)
 
 ## Setup
 1. `cd` to repository

@@ -197,7 +197,7 @@ class Parser:
 
         # TODO: Traverse tree
         root: fn.Node = self.semantic_stack.pop()
-        self.visualize_ast(root, 'output/ast.gv.pdf')
+        self.visualize_ast(root, 'output/ast')
 
         if t.token is not '$' or self.error:
             return False

@@ -165,22 +165,22 @@ predict_set = {
         "RHS": ["@prog", "@classList", "classDeclList", "@funcDefList", "funcDefList", "T_R_PROGRAM", "funcBody", "@4,1", "T_R_SEMI_COLON"]},
     "2": {
         "LHS": "classDeclList",
-        "RHS": ["@classDecl", "classDecl", "@2,1", "classDeclList"]},
+        "RHS": ["classDecl", "classDeclList"]},
     "3": {
         "LHS": "classDeclList",
         "RHS": ["EPSILON"]},
     "4": {
         "LHS": "classDecl",
-        "RHS": ["T_R_CLASS", "T_A_ID", "classInherit", "T_R_OPEN_BRACE", "classBody", "T_R_CLOSE_BRACE", "T_R_SEMI_COLON"]},
+        "RHS": ["@classDecl", "T_R_CLASS", "@id", "T_A_ID", "@inherList", "classInherit", "T_R_OPEN_BRACE", "@membList", "classBody", "@4,1", "@2,1", "T_R_CLOSE_BRACE", "T_R_SEMI_COLON"]},
     "5": {
         "LHS": "classInherit",
-        "RHS": ["T_R_COLON", "T_A_ID", "classInheritTail"]},
+        "RHS": ["T_R_COLON", "@id", "T_A_ID", "@2,1", "classInheritTail"]},
     "6": {
         "LHS": "classInherit",
         "RHS": ["EPSILON"]},
     "7": {
         "LHS": "classInheritTail",
-        "RHS": ["T_R_COMMA", "T_A_ID", "classInheritTail"]},
+        "RHS": ["T_R_COMMA", "@id", "T_A_ID", "@2,1", "classInheritTail"]},
     "8": {
         "LHS": "classInheritTail",
         "RHS": ["EPSILON"]},

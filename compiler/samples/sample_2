@@ -1,1 +1,13 @@
-program{int x;};
+class InheritedUtility {
+    int member1;
+};
+
+class Utility {
+    int member1;
+};
+
+program {
+    int x;
+    int y;
+    int z;
+};
