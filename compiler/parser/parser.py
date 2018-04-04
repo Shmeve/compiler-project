@@ -82,7 +82,12 @@ class Parser:
                 else:
                     # Push to Semantic Stack
                     node_type: str = x[1:]                                    # Remove @ lead symbol for semantic action
-                    self.semantic_stack.append(self.node_of_type(node_type))  # Create and push right node type
+                    create_node = self.node_of_type(node_type)                # Create the right node type
+
+                    if self.save_token(node_type):
+                        create_node.item = t                                  # Store token in node
+
+                    self.semantic_stack.append(create_node)                   # Push node to semantic stack
                     self.parse_stack.pop()                                    # Parse next element
             # Current element is a terminal
             elif x in terminals:
@@ -195,7 +200,6 @@ class Parser:
                             self.output.append(d)
                             self.inverse_rhs_multiple_push(rule)
 
-        # TODO: Traverse tree
         root: fn.Node = self.semantic_stack.pop()
         self.visualize_ast(root, 'output/ast')
 
@@ -296,6 +300,12 @@ class Parser:
         return linked_list
 
     def node_of_type(self, node_type: str) -> fn.Node:
+        """
+        Create a node based on the parsed semantic action (eg. @prog)
+
+        :param node_type: type of node to create. (leading '@' stripped by parser
+        :return: Node
+        """
         if node_type == "prog":
             node = fc.ProgNodeCreator().node
             return node
@@ -398,6 +408,14 @@ class Parser:
         pass
 
     def visualize_ast(self, root: fn.Node, output_file: str) -> None:
+        """
+        Performs a Breadth First Search pass of the AST and produces a visualization of the graph using the Graphviz
+        library
+
+        :param root: Root of AST to visualize
+        :param output_file: File path and name of where to store AST visualization
+        :return: None
+        """
         count: int = 0
         nodes_to_expand_remaining: bool = True
         pointer: fn.Node = root
@@ -405,7 +423,12 @@ class Parser:
 
         # Initialize Graphviz with root node
         dot = Digraph()
-        dot.node(str(count), root.node_type)
+
+        if pointer.item is not None:
+            dot.node(str(count), pointer.node_type + "\n" + pointer.item.token + "\n" + pointer.item.lexeme)
+        else:
+            dot.node(str(count), pointer.node_type)
+
         parent_id = str(count)
 
         while nodes_to_expand_remaining:
@@ -413,7 +436,11 @@ class Parser:
             count += 1
             search_queue.append(GraphvizNode(pointer, str(count)))
 
-            dot.node(str(count), pointer.node_type)
+            if pointer.item is not None:
+                dot.node(str(count), pointer.node_type + "\n" + pointer.item.token + "\n" + pointer.item.lexeme)
+            else:
+                dot.node(str(count), pointer.node_type)
+
             dot.edge(parent_id, str(count))
 
             # Link all siblings
@@ -422,7 +449,11 @@ class Parser:
                 count += 1
                 search_queue.append(GraphvizNode(pointer, str(count)))
 
-                dot.node(str(count), pointer.node_type)
+                if pointer.item is not None:
+                    dot.node(str(count), pointer.node_type + "\n" + pointer.item.token + "\n" + pointer.item.lexeme)
+                else:
+                    dot.node(str(count), pointer.node_type)
+
                 dot.edge(parent_id, str(count))
 
             while True:
@@ -441,3 +472,20 @@ class Parser:
                     nodes_to_expand_remaining = False
 
         dot.render(output_file, view=True)
+
+    def save_token(self, node_type: str) -> bool:
+        """
+        Helper function used to determine if the node being created will require saving a token from
+        self.token_sequence.
+
+        :param node_type: type of node being created (leading '@' stripped by parser)
+        :return: bool
+        """
+        # TODO: List all required node types
+        nodes_requiring_token: list = [
+            'prog',
+            'type',
+            'id'
+        ]
+
+        return node_type in nodes_requiring_token
