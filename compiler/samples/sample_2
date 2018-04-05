@@ -1,5 +1,6 @@
-class InheritedUtility {
-    int member1;
+class Utility:InheritedUtility,C,D {
+    int member1[1][3][5];
+    float member2;
 };
 
 class Utility {

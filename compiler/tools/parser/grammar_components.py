@@ -192,13 +192,13 @@ predict_set = {
         "RHS": ["EPSILON"]},
     "11": {
         "LHS": "classProp",
-        "RHS": ["type", "T_A_ID"]},
+        "RHS": ["@type", "type", "@id", "T_A_ID"]},
     "12": {
         "LHS": "classPropTail",
-        "RHS": ["T_R_OPEN_PARENTHESIS", "fParams", "T_R_CLOSE_PARENTHESIS", "T_R_SEMI_COLON", "funcDecl"]},
+        "RHS": ["@funcDecl", "T_R_OPEN_PARENTHESIS", "@fParams", "fParams", "@4,3", "@2,1", "T_R_CLOSE_PARENTHESIS", "T_R_SEMI_COLON", "funcDecl"]},
     "13": {
         "LHS": "classPropTail",
-        "RHS": ["arraySize", "T_R_SEMI_COLON", "classBody"]},
+        "RHS": ["@varDecl", "@dimList", "arraySize", "@4,3", "@2,1", "T_R_SEMI_COLON", "classBody"]},
     "14": {
         "LHS": "funcDecl",
         "RHS": ["funcDeclTail", "funcDecl"]},
@@ -393,7 +393,7 @@ predict_set = {
         "RHS": ["EPSILON"]},
     "78": {
         "LHS": "arraySize",
-        "RHS": ["T_R_OPEN_BRACKET", "T_A_INTEGER", "T_R_CLOSE_BRACKET", "arraySize"]},
+        "RHS": ["T_R_OPEN_BRACKET", "@num", "T_A_INTEGER", "@2,1", "T_R_CLOSE_BRACKET", "arraySize"]},
     "79": {
         "LHS": "arraySize",
         "RHS": ["EPSILON"]},

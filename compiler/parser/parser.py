@@ -405,6 +405,9 @@ class Parser:
         elif node_type == "aParams":
             node = fc.AParamsNodeCreator().node
             return node
+        elif node_type == "null":
+            node = fc.ConcreteNullCreator().node
+            return node
         pass
 
     def visualize_ast(self, root: fn.Node, output_file: str) -> None:
@@ -485,7 +488,8 @@ class Parser:
         nodes_requiring_token: list = [
             'prog',
             'type',
-            'id'
+            'id',
+            'num'
         ]
 
         return node_type in nodes_requiring_token
