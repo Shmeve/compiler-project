@@ -1,10 +1,15 @@
-class Utility:InheritedUtility {
+class Utility:InheritedUtility,A,B {
     int x(int a, int b, int c);
     int y(int d[10]);
 };
 
 class Utility {
     int member1;
+    int test(int e);
+};
+
+int Utility::test(int e) {
+    int f;
 };
 
 program {

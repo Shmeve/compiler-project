@@ -216,13 +216,13 @@ predict_set = {
         "RHS": ["EPSILON"]},
     "19": {
         "LHS": "funcDef",
-        "RHS": ["funcHead", "funcBody", "T_R_SEMI_COLON"]},
+        "RHS": ["@funcDef", "funcHead", "funcBody", "@6,1", "@2,1", "T_R_SEMI_COLON"]},
     "20": {
         "LHS": "funcHead",
-        "RHS": ["type", "T_A_ID", "funcScope", "T_R_OPEN_PARENTHESIS", "fParams", "T_R_CLOSE_PARENTHESIS"]},
+        "RHS": ["@type", "type", "@id", "T_A_ID", "funcScope", "T_R_OPEN_PARENTHESIS", "@fparamList", "fParams", "T_R_CLOSE_PARENTHESIS"]},
     "21": {
         "LHS": "funcScope",
-        "RHS": ["T_R_DOUBLE_COLON", "T_A_ID"]},
+        "RHS": ["T_R_DOUBLE_COLON", "@id", "T_A_ID"]},
     "22": {
         "LHS": "funcScope",
         "RHS": ["EPSILON"]},
