@@ -195,19 +195,19 @@ predict_set = {
         "RHS": ["@type", "type", "@id", "T_A_ID"]},
     "12": {
         "LHS": "classPropTail",
-        "RHS": ["@funcDecl", "T_R_OPEN_PARENTHESIS", "@fParams", "fParams", "@4,3", "@2,1", "T_R_CLOSE_PARENTHESIS", "T_R_SEMI_COLON", "funcDecl"]},
+        "RHS": ["@funcDecl", "T_R_OPEN_PARENTHESIS", "@fparamList", "fParams", "@4,3", "@2,1", "T_R_CLOSE_PARENTHESIS", "T_R_SEMI_COLON", "funcDecl"]},
     "13": {
         "LHS": "classPropTail",
         "RHS": ["@varDecl", "@dimList", "arraySize", "@4,3", "@2,1", "T_R_SEMI_COLON", "classBody"]},
     "14": {
         "LHS": "funcDecl",
-        "RHS": ["funcDeclTail", "funcDecl"]},
+        "RHS": ["@funcDecl", "funcDeclTail", "funcDecl"]},
     "15": {
         "LHS": "funcDecl",
         "RHS": ["EPSILON"]},
     "16": {
         "LHS": "funcDeclTail",
-        "RHS": ["type", "T_A_ID", "T_R_OPEN_PARENTHESIS", "fParams", "T_R_CLOSE_PARENTHESIS", "T_R_SEMI_COLON"]},
+        "RHS": ["@type", "type", "@id", "T_A_ID", "T_R_OPEN_PARENTHESIS", "@fparamList", "fParams", "@4,1", "@2,1", "T_R_CLOSE_PARENTHESIS", "T_R_SEMI_COLON"]},
     "17": {
         "LHS": "funcDefList",
         "RHS": ["funcDef", "funcDefList"]},
@@ -411,7 +411,7 @@ predict_set = {
         "RHS": ["T_R_INT"]},
     "84": {
         "LHS": "fParams",
-        "RHS": ["type", "T_A_ID", "arraySize", "fParamsTail"]},
+        "RHS": ["@fparam", "@type", "type", "@id", "T_A_ID", "@dimList", "arraySize", "@4,1", "@2,1", "fParamsTail"]},
     "85": {
         "LHS": "fParams",
         "RHS": ["EPSILON"]},
@@ -423,7 +423,7 @@ predict_set = {
         "RHS": ["EPSILON"]},
     "88": {
         "LHS": "fParamsTail",
-        "RHS": ["T_R_COMMA", "type", "T_A_ID", "arraySize", "fParamsTail"]},
+        "RHS": ["T_R_COMMA", "@fparam", "@type", "type", "@id", "T_A_ID", "@dimList", "arraySize", "@4,1", "@2,1", "fParamsTail"]},
     "89": {
         "LHS": "fParamsTail",
         "RHS": ["EPSILON"]},

@@ -1,6 +1,6 @@
-class Utility:InheritedUtility,C,D {
-    int member1[1][3][5];
-    float member2;
+class Utility:InheritedUtility {
+    int x(int a, int b, int c);
+    int y(int d[10]);
 };
 
 class Utility {

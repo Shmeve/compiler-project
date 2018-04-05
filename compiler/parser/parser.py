@@ -426,11 +426,12 @@ class Parser:
 
         # Initialize Graphviz with root node
         dot = Digraph()
+        dot.node(str(count), pointer.node_type)
 
-        if pointer.item is not None:
-            dot.node(str(count), pointer.node_type + "\n" + pointer.item.token + "\n" + pointer.item.lexeme)
-        else:
-            dot.node(str(count), pointer.node_type)
+        # if pointer.item is not None:
+        #     dot.node(str(count), pointer.node_type + "\n" + pointer.item.token + "\n" + pointer.item.lexeme)
+        # else:
+        #     dot.node(str(count), pointer.node_type)
 
         parent_id = str(count)
 
