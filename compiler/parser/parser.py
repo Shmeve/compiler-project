@@ -241,8 +241,17 @@ class Parser:
         :return: str
         """
         for k, v in predict_set.items():
-            if v["LHS"] is key and v["RHS"][0] is "EPSILON":
-                return k
+            if v["LHS"] is key:
+                if v["RHS"][0] is "EPSILON":
+                    return k
+                elif v["RHS"][0][0] is "@":
+                    temp = v["RHS"]
+
+                    while temp[0][0] is "@" and len(temp) > 1:
+                        temp = temp[1:]
+
+                    if temp[0] is "EPSILON":
+                        return k
 
         # Check key->[Single Element Productions] since they may also lead to EPSILON
         for k, v in predict_set.items():
@@ -250,7 +259,7 @@ class Parser:
                 completed = True
 
                 for i in v["RHS"]:
-                    if self.check_for_epsilon_rule(i) is "":
+                    if self.check_for_epsilon_rule(i) is "" and i[0] is not "@":
                         completed = False
                         break
                 if completed:
@@ -490,7 +499,10 @@ class Parser:
             'prog',
             'type',
             'id',
-            'num'
+            'num',
+            'sign',
+            'addOp',
+            'multOp'
         ]
 
         return node_type in nodes_requiring_token

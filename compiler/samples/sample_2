@@ -10,10 +10,12 @@ class Utility {
 
 int Utility::test(int e) {
     int f;
+    f.a().b=1;
 };
 
 program {
     int x;
     int y;
     int z;
+    x=1;
 };

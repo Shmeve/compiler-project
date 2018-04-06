@@ -231,10 +231,10 @@ predict_set = {
         "RHS": ["T_R_OPEN_BRACE", "@statBlock", "funcBodyInner", "T_R_CLOSE_BRACE"]},
     "24": {
         "LHS": "funcBodyInner",
-        "RHS": ["@varDecl", "@type", "T_A_ID", "funcBodyDecl"]},
+        "RHS": ["@id", "T_A_ID", "funcBodyDecl"]},
     "25": {
         "LHS": "funcBodyInner",
-        "RHS": ["@varDecl", "@type", "primitiveType", "varDeclTail", "funcBodyInner"]},
+        "RHS": ["@type", "primitiveType", "varDeclTail", "funcBodyInner"]},
     "26": {
         "LHS": "funcBodyInner",
         "RHS": ["construct", "funcBodyStat"]},
@@ -246,13 +246,13 @@ predict_set = {
         "RHS": ["statementList"]},
     "29": {
         "LHS": "funcBodyDecl",
-        "RHS": ["variableCont", "assignOp", "expr", "T_R_SEMI_COLON", "funcBodyStat"]},
+        "RHS": ["variableCont", "@assignStat", "assignOp", "expr", "@3,2", "@2,1", "T_R_SEMI_COLON", "funcBodyStat"]},
     "30": {
         "LHS": "funcBodyDecl",
         "RHS": ["varDeclTail", "funcBodyInner"]},
     "31": {
         "LHS": "varDeclTail",
-        "RHS": ["@id", "T_A_ID", "@dimList", "arraySize", "@4,1", "@2,1", "T_R_SEMI_COLON"]},
+        "RHS": ["@varDecl", "@id", "T_A_ID", "@dimList", "arraySize", "@4,2", "@2,1", "T_R_SEMI_COLON"]},
     "32": {
         "LHS": "construct",
         "RHS": ["T_R_FOR", "T_R_OPEN_PARENTHESIS", "type", "T_A_ID", "assignOp", "expr", "T_R_SEMI_COLON", "relExpr", "T_R_SEMI_COLON", "assignStat", "T_R_CLOSE_PARENTHESIS", "statBlock", "T_R_SEMI_COLON"]},
@@ -270,7 +270,7 @@ predict_set = {
         "RHS": ["T_R_RETURN", "T_R_OPEN_PARENTHESIS", "expr", "T_R_CLOSE_PARENTHESIS", "T_R_SEMI_COLON"]},
     "37": {
         "LHS": "statement",
-        "RHS": ["assignStat", "T_R_SEMI_COLON"]},
+        "RHS": ["@assignStat", "assignStat", "T_R_SEMI_COLON"]},
     "38": {
         "LHS": "statement",
         "RHS": ["construct"]},
@@ -282,7 +282,7 @@ predict_set = {
         "RHS": ["EPSILON"]},
     "41": {
         "LHS": "assignStat",
-        "RHS": ["variable", "assignOp", "expr"]},
+        "RHS": ["@var", "variable", "assignOp", "expr", "@3,1"]},
     "42": {
         "LHS": "statBlock",
         "RHS": ["T_R_OPEN_BRACE", "statementList", "T_R_CLOSE_BRACE"]},
@@ -297,34 +297,34 @@ predict_set = {
         "RHS": ["arithExpr", "exprTail"]},
     "46": {
         "LHS": "exprTail",
-        "RHS": ["relOp", "arithExpr"]},
+        "RHS": ["@relExpr", "@relOp", "relOp", "arithExpr", "@4,2"]},
     "47": {
         "LHS": "exprTail",
         "RHS": ["EPSILON"]},
     "48": {
         "LHS": "relExpr",
-        "RHS": ["arithExpr", "relOp", "arithExpr"]},
+        "RHS": ["arithExpr", "@relOp", "relOp", "arithExpr", "@4,1"]},
     "49": {
         "LHS": "arithExpr",
         "RHS": ["term", "arithExprTail"]},
     "50": {
         "LHS": "arithExprTail",
-        "RHS": ["addOp", "term", "arithExprTail"]},
+        "RHS": ["@addOp", "addOp", "term", "@3,2", "arithExprTail"]},
     "51": {
         "LHS": "arithExprTail",
         "RHS": ["EPSILON"]},
     "52": {
         "LHS": "sign",
-        "RHS": ["T_R_MINUS"]},
+        "RHS": ["@sign", "T_R_MINUS"]},
     "53": {
         "LHS": "sign",
-        "RHS": ["T_R_PLUS"]},
+        "RHS": ["@sign", "T_R_PLUS"]},
     "54": {
         "LHS": "term",
         "RHS": ["factor", "termTail"]},
     "55": {
         "LHS": "termTail",
-        "RHS": ["multOp", "factor", "termTail"]},
+        "RHS": ["@multOp", "multOp", "factor", "@3,2", "termTail"]},
     "56": {
         "LHS": "termTail",
         "RHS": ["EPSILON"]},
@@ -333,34 +333,34 @@ predict_set = {
         "RHS": ["T_R_OPEN_PARENTHESIS", "arithExpr", "T_R_CLOSE_PARENTHESIS"]},
     "58": {
         "LHS": "factor",
-        "RHS": ["T_A_FLOAT"]},
+        "RHS": ["@num", "T_A_FLOAT"]},
     "59": {
         "LHS": "factor",
-        "RHS": ["T_A_INTEGER"]},
+        "RHS": ["@num", "T_A_INTEGER"]},
     "60": {
         "LHS": "factor",
-        "RHS": ["T_R_NOT", "factor"]},
+        "RHS": ["@not", "T_R_NOT", "factor", "@2,1"]},
     "61": {
         "LHS": "factor",
-        "RHS": ["varOrFunc"]},
+        "RHS": ["@var", "varOrFunc"]},
     "62": {
         "LHS": "factor",
-        "RHS": ["sign", "factor"]},
+        "RHS": ["sign", "factor", "@2,1"]},
     "63": {
         "LHS": "varOrFunc",
-        "RHS": ["T_A_ID", "varOrFuncEval", "idnest"]},
+        "RHS": ["@id", "T_A_ID", "varOrFuncEval", "@2,1", "idnest"]},
     "64": {
         "LHS": "varOrFuncEval",
-        "RHS": ["variableTail"]},
+        "RHS": ["@dataMember", "variableTail"]},
     "65": {
         "LHS": "varOrFuncEval",
-        "RHS": ["functionCallTail"]},
+        "RHS": ["@fCall", "functionCallTail"]},
     "66": {
         "LHS": "variableTail",
-        "RHS": ["indice"]},
+        "RHS": ["@indexList", "indice", "@3,2"]},
     "67": {
         "LHS": "functionCallTail",
-        "RHS": ["T_R_OPEN_PARENTHESIS", "aParams", "T_R_CLOSE_PARENTHESIS"]},
+        "RHS": ["T_R_OPEN_PARENTHESIS", "aParams", "@3,2", "T_R_CLOSE_PARENTHESIS"]},
     "68": {
         "LHS": "idnest",
         "RHS": ["T_R_DOT", "varOrFunc"]},
@@ -372,22 +372,22 @@ predict_set = {
         "RHS": ["T_A_ID", "variableCont"]},
     "71": {
         "LHS": "variableCont",
-        "RHS": ["variableTail", "variableCont2"]},
+        "RHS": ["@dataMember", "variableTail", "variableCont2", "@2,2"]},
     "72": {
         "LHS": "variableCont",
-        "RHS": ["functionCallTail", "functionCallTrap"]},
+        "RHS": ["@fCall", "@aParams", "functionCallTail", "functionCallTrap", "@2,2"]},
     "73": {
         "LHS": "variableCont2",
-        "RHS": ["T_R_DOT", "T_A_ID", "variableCont"]},
+        "RHS": ["T_R_DOT", "@id", "T_A_ID", "variableCont"]},
     "74": {
         "LHS": "variableCont2",
-        "RHS": ["EPSILON"]},
+        "RHS": ["@var", "EPSILON"]},
     "75": {
         "LHS": "functionCallTrap",
-        "RHS": ["T_R_DOT", "T_A_ID", "variableCont"]},
+        "RHS": ["T_R_DOT", "@id", "T_A_ID", "variableCont"]},
     "76": {
         "LHS": "indice",
-        "RHS": ["T_R_OPEN_BRACKET", "arithExpr", "T_R_CLOSE_BRACKET", "indice"]},
+        "RHS": ["T_R_OPEN_BRACKET", "arithExpr", "@2,1", "T_R_CLOSE_BRACKET", "indice"]},
     "77": {
         "LHS": "indice",
         "RHS": ["EPSILON"]},
@@ -417,7 +417,7 @@ predict_set = {
         "RHS": ["EPSILON"]},
     "86": {
         "LHS": "aParams",
-        "RHS": ["expr", "aParamsTail"]},
+        "RHS": ["expr", "@2,1", "aParamsTail"]},
     "87": {
         "LHS": "aParams",
         "RHS": ["EPSILON"]},
