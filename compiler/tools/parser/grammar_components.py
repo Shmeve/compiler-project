@@ -225,7 +225,7 @@ predict_set = {
         "RHS": ["T_R_DOUBLE_COLON", "@id", "T_A_ID"]},
     "22": {
         "LHS": "funcScope",
-        "RHS": ["EPSILON"]},
+        "RHS": ["@null", "EPSILON"]},
     "23": {
         "LHS": "funcBody",
         "RHS": ["T_R_OPEN_BRACE", "@statBlock", "funcBodyInner", "T_R_CLOSE_BRACE"]},
@@ -237,7 +237,7 @@ predict_set = {
         "RHS": ["@type", "primitiveType", "varDeclTail", "funcBodyInner"]},
     "26": {
         "LHS": "funcBodyInner",
-        "RHS": ["construct", "funcBodyStat"]},
+        "RHS": ["construct", "@2,1", "funcBodyStat"]},
     "27": {
         "LHS": "funcBodyInner",
         "RHS": ["EPSILON"]},
@@ -255,25 +255,25 @@ predict_set = {
         "RHS": ["@varDecl", "@id", "T_A_ID", "@dimList", "arraySize", "@4,2", "@2,1", "T_R_SEMI_COLON"]},
     "32": {
         "LHS": "construct",
-        "RHS": ["T_R_FOR", "T_R_OPEN_PARENTHESIS", "type", "T_A_ID", "assignOp", "expr", "T_R_SEMI_COLON", "relExpr", "T_R_SEMI_COLON", "assignStat", "T_R_CLOSE_PARENTHESIS", "statBlock", "T_R_SEMI_COLON"]},
+        "RHS": ["@forStat", "T_R_FOR", "T_R_OPEN_PARENTHESIS", "@type", "type", "@id", "T_A_ID", "assignOp", "expr", "T_R_SEMI_COLON", "@relExpr", "relExpr", "T_R_SEMI_COLON", "@assignStat", "assignStat", "T_R_CLOSE_PARENTHESIS", "@statBlock", "statBlock", "@7,1", "T_R_SEMI_COLON"]},
     "33": {
         "LHS": "construct",
-        "RHS": ["T_R_IF", "T_R_OPEN_PARENTHESIS", "expr", "T_R_CLOSE_PARENTHESIS", "T_R_THEN", "statBlock", "T_R_ELSE", "statBlock", "T_R_SEMI_COLON"]},
+        "RHS": ["@ifStat", "T_R_IF", "T_R_OPEN_PARENTHESIS", "expr", "T_R_CLOSE_PARENTHESIS", "T_R_THEN", "@statBlock", "statBlock", "T_R_ELSE", "@statBlock", "statBlock", "@4,1", "T_R_SEMI_COLON"]},
     "34": {
         "LHS": "construct",
-        "RHS": ["T_R_GET", "T_R_OPEN_PARENTHESIS", "variable", "T_R_CLOSE_PARENTHESIS", "T_R_SEMI_COLON"]},
+        "RHS": ["@getStat", "T_R_GET", "T_R_OPEN_PARENTHESIS", "variable", "@2,1", "T_R_CLOSE_PARENTHESIS", "T_R_SEMI_COLON"]},
     "35": {
         "LHS": "construct",
-        "RHS": ["T_R_PUT", "T_R_OPEN_PARENTHESIS", "expr", "T_R_CLOSE_PARENTHESIS", "T_R_SEMI_COLON"]},
+        "RHS": ["@putStat", "T_R_PUT", "T_R_OPEN_PARENTHESIS", "expr", "@2,1", "T_R_CLOSE_PARENTHESIS", "T_R_SEMI_COLON"]},
     "36": {
         "LHS": "construct",
-        "RHS": ["T_R_RETURN", "T_R_OPEN_PARENTHESIS", "expr", "T_R_CLOSE_PARENTHESIS", "T_R_SEMI_COLON"]},
+        "RHS": ["@returnStat", "T_R_RETURN", "T_R_OPEN_PARENTHESIS", "expr", "@2,1", "T_R_CLOSE_PARENTHESIS", "T_R_SEMI_COLON"]},
     "37": {
         "LHS": "statement",
-        "RHS": ["@assignStat", "assignStat", "T_R_SEMI_COLON"]},
+        "RHS": ["@assignStat", "assignStat", "@2,1", "T_R_SEMI_COLON"]},
     "38": {
         "LHS": "statement",
-        "RHS": ["construct"]},
+        "RHS": ["construct", "@2,1"]},
     "39": {
         "LHS": "statementList",
         "RHS": ["statement", "statementList"]},
@@ -282,7 +282,7 @@ predict_set = {
         "RHS": ["EPSILON"]},
     "41": {
         "LHS": "assignStat",
-        "RHS": ["@var", "variable", "assignOp", "expr", "@3,1"]},
+        "RHS": ["variable", "assignOp", "expr", "@3,1"]},
     "42": {
         "LHS": "statBlock",
         "RHS": ["T_R_OPEN_BRACE", "statementList", "T_R_CLOSE_BRACE"]},
@@ -354,7 +354,7 @@ predict_set = {
         "RHS": ["@dataMember", "variableTail"]},
     "65": {
         "LHS": "varOrFuncEval",
-        "RHS": ["@fCall", "functionCallTail"]},
+        "RHS": ["@fCall", "@aParams", "functionCallTail"]},
     "66": {
         "LHS": "variableTail",
         "RHS": ["@indexList", "indice", "@3,2"]},
@@ -369,7 +369,7 @@ predict_set = {
         "RHS": ["EPSILON"]},
     "70": {
         "LHS": "variable",
-        "RHS": ["T_A_ID", "variableCont"]},
+        "RHS": ["@id", "T_A_ID", "variableCont"]},
     "71": {
         "LHS": "variableCont",
         "RHS": ["@dataMember", "variableTail", "variableCont2", "@2,2"]},

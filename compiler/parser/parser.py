@@ -97,7 +97,7 @@ class Parser:
                     t = self.next_token()
                 # Unexpected terminal
                 else:
-                    self.skip_errors()
+                    self.skip_errors(t)
                     self.error = True
             # Skip EPSILONs
             elif x is "EPSILON":
@@ -147,7 +147,7 @@ class Parser:
 
                     # No epsilon rule
                     if forced_epsilon_rule is "":
-                        self.skip_errors()
+                        self.skip_errors(t)
                         self.error = True
                     # Epsilon rule exists, skip non-terminal
                     else:
@@ -208,9 +208,11 @@ class Parser:
         else:
             return True
 
-    def skip_errors(self):
+    def skip_errors(self, t: Token):
         # TODO: Implement error recovery
         self.parse_stack.pop()
+        with open("output/parse_error", "a") as f:
+            f.write(t.token + " " + str(t.line) + " " + str(t.column))
         return None
 
     def next_token(self) -> Token:
@@ -502,7 +504,8 @@ class Parser:
             'num',
             'sign',
             'addOp',
-            'multOp'
+            'multOp',
+            'relOp'
         ]
 
         return node_type in nodes_requiring_token
