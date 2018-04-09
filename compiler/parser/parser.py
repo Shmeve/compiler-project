@@ -200,8 +200,9 @@ class Parser:
                             self.output.append(d)
                             self.inverse_rhs_multiple_push(rule)
 
-        root: fn.Node = self.semantic_stack.pop()
-        self.visualize_ast(root, 'output/ast')
+        self.ast_root = self.semantic_stack.pop()
+        self.ast_touch_ups()
+        self.visualize_ast('output/ast')
 
         if t.token is not '$' or self.error:
             return False
@@ -212,7 +213,7 @@ class Parser:
         # TODO: Implement error recovery
         self.parse_stack.pop()
         with open("output/parse_error", "a") as f:
-            f.write(t.token + " " + str(t.line) + " " + str(t.column))
+            f.write(t.token + " " + str(t.line) + " " + str(t.column) + "\n")
         return None
 
     def next_token(self) -> Token:
@@ -421,7 +422,7 @@ class Parser:
             return node
         pass
 
-    def visualize_ast(self, root: fn.Node, output_file: str) -> None:
+    def visualize_ast(self, output_file: str) -> None:
         """
         Performs a Breadth First Search pass of the AST and produces a visualization of the graph using the Graphviz
         library
@@ -432,7 +433,7 @@ class Parser:
         """
         count: int = 0
         nodes_to_expand_remaining: bool = True
-        pointer: fn.Node = root
+        pointer: fn.Node = self.ast_root
         search_queue: list = []
 
         # Initialize Graphviz with root node
@@ -509,3 +510,94 @@ class Parser:
         ]
 
         return node_type in nodes_requiring_token
+
+    def ast_touch_ups(self) -> None:
+        """
+        Perform minor tweaks to fully generated AST to fix minor formatting issues.
+
+        :return: None
+        """
+        nodes_to_expand_remaining: bool = True
+        pointer: fn.Node = self.ast_root
+        search_queue: list = []
+
+        while nodes_to_expand_remaining:
+            if pointer.leftmost_child is not None:
+                pointer = pointer.leftmost_child
+
+                # varDecl type id fix
+                self.fix_vardecl_id_nodes(pointer)
+                self.fix_lhs_var_in_assign_stat(pointer)
+
+                search_queue.append(pointer)
+
+                while pointer.right_sibling is not None:
+                    pointer = pointer.right_sibling
+
+                    # varDecl type id fix
+                    self.fix_vardecl_id_nodes(pointer)
+                    self.fix_lhs_var_in_assign_stat(pointer)
+
+                    search_queue.append(pointer)
+
+            if len(search_queue) > 0:
+                pointer = search_queue[0]
+                search_queue = search_queue[1:]
+                nodes_to_expand_remaining = True
+            else:
+                nodes_to_expand_remaining = False
+
+    def fix_vardecl_id_nodes(self, p: fn.Node) -> None:
+        """
+        Fix varDecl nodes where the type node was created as an id node
+
+        :param p: Pointer to varDecl node in AST
+        :return: None
+        """
+        if p.node_type == "varDecl":
+            if p.leftmost_child.node_type == "id":
+                temp: fn.Node = fc.TypeNodeCreator().node
+                temp.item = p.leftmost_child.item
+                temp.leftmost_sibling = temp
+                temp.right_sibling = p.leftmost_child.right_sibling
+
+                # Set all siblings leftmost sibling pointers
+                t_point = temp
+                while t_point.right_sibling is not None:
+                    t_point = t_point.right_sibling
+                    t_point.leftmost_sibling = temp
+
+                p.leftmost_child.parent = None
+                temp.parent = p
+                p.leftmost_child = temp
+
+    def fix_lhs_var_in_assign_stat(self, p: fn.Node) -> None:
+        """
+        Fix varElement order of var elements on LHS of assignStat elements
+
+        :param p: pointer to assignStat node in AST
+        :return: None
+        """
+
+        if p.node_type == "assignStat":
+            if p.leftmost_child.leftmost_child.right_sibling is not None:
+                head: fn.Node = p.leftmost_child.leftmost_child
+                pointer: fn.Node = head
+                temp: fn.Node
+
+                while pointer.right_sibling is not None:
+                    temp = pointer.right_sibling                # Node to shift to front
+                    pointer.right_sibling = temp.right_sibling  # Step over node being moved
+                    temp.right_sibling = head                   # Move node to front of list
+                    head = temp                                 # Reassign head
+
+                # Reset leftmost sibling values
+                pointer = head
+                head.leftmost_sibling = head
+
+                while pointer.right_sibling is not None:
+                    pointer = pointer.right_sibling
+                    pointer.leftmost_sibling = head
+
+                # Point parent (var) to new leftmost child
+                head.parent.leftmost_child = head
