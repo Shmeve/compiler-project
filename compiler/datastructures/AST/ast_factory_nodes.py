@@ -1,6 +1,7 @@
 import abc
 from compiler.scanner.token import Token
-from compiler.semantic_analysis.visitor.visitor import Visitor
+from compiler.semantic_analysis.visitor import Visitor
+from compiler.datastructures.symbol_table import SymbolTable
 
 
 class Node(metaclass=abc.ABCMeta):
@@ -11,6 +12,9 @@ class Node(metaclass=abc.ABCMeta):
         self.right_sibling: Node = right_sibling
         self.item: Token = item
         self.node_type: str = type
+
+        # SymbolTableCreationVisitor
+        self.symbTable: SymbolTable = None
 
         if self.leftmost_sibling is None:
             self.leftmost_sibling = self
@@ -77,7 +81,6 @@ class ConcreteNullNode(Node):
         p_visitor.visit_null_node_node(self)
 
 
-# New things
 class ProgNode(Node):
     def build(self):
         self.node_type = "prog"

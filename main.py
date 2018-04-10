@@ -1,8 +1,9 @@
 import sys
 from compiler.scanner.scanner import Scanner
 from compiler.parser.parser import Parser
+from compiler.semantic_analysis.semantic_analyzer import SemanticAnalyzer
 
-DEBUG_TEST_FILE = "compiler/samples/sample_2"
+DEBUG_TEST_FILE = "compiler/samples/sample_4"
 
 args_len: int = len(sys.argv)
 
@@ -29,3 +30,7 @@ if args_len >= 3:
 else:
     p.log_results()
     print('----------\nResult: ' + str(result))
+
+print("----------\nSemantic Analysis\n----------")
+sa: SemanticAnalyzer = SemanticAnalyzer(p.ast_root)
+sa.analyze()
