@@ -35,7 +35,8 @@ class SymbolTableCreationVisitor(Visitor):
                 pointer.accept(self)
 
     def visit_null_node_node(self, p_node: fn.ConcreteNullNode):
-        pass
+        # Propagate down
+        self.propagate(p_node)
 
     def visit_prog_node(self, p_node: fn.ProgNode):
         p_node.symb_table = SymbolTable("Global")
@@ -143,10 +144,13 @@ class SymbolTableCreationVisitor(Visitor):
         self.propagate(p_node)
 
     def visit_id_node(self, p_node: fn.IdNode):
-        pass
+        self.propagate(p_node)
+
+        p_node.moon_var_name = p_node.item.lexeme
 
     def visit_type_node(self, p_node: fn.TypeNode):
-        pass
+        self.propagate(p_node)
+        p_node.var_type = p_node.item.lexeme
 
     def visit_inher_list_node(self, p_node: fn.InherListNode):
         # Propagate down
@@ -270,10 +274,32 @@ class SymbolTableCreationVisitor(Visitor):
         self.propagate(p_node)
 
     def visit_dim_list_node(self, p_node: fn.DimListNode):
-        pass
+        # Propagate down
+        self.propagate(p_node)
 
     def visit_num_node(self, p_node: fn.NumNode):
-        pass
+        # Propagate down
+        self.propagate(p_node)
+
+        # Temp var
+        temp_var_name: str = self.get_temp_var_name()
+        p_node.moon_var_name = temp_var_name
+
+        # Var type
+        temp_var_type: str = ""
+
+        if p_node.item.token == "T_A_INTEGER":
+            temp_var_type = "int"
+        elif p_node.item.token == "T_A_FLOAT":
+            temp_var_type = "float"
+        else:
+            temp_var_type = p_node.var_type
+
+        p_node.var_type = temp_var_type
+
+        # Setup entry
+        local_entry: SymbolTableElement = SymbolTableElement(temp_var_name, "Temp Var", temp_var_type)
+        p_node.symb_table.insert(local_entry)
 
     def visit_if_stat_node(self, p_node: fn.IfStatNode):
         # Propagate down
@@ -316,7 +342,8 @@ class SymbolTableCreationVisitor(Visitor):
         self.propagate(p_node)
 
     def visit_rel_op_node(self, p_node: fn.RelOpNode):
-        pass
+        # Propagate down
+        self.propagate(p_node)
 
     def visit_mult_op_node(self, p_node: fn.MultOpNode):
         # Propagate down
@@ -326,7 +353,9 @@ class SymbolTableCreationVisitor(Visitor):
         temp_var_name = self.get_temp_var_name()
         p_node.moon_var_name = temp_var_name
 
-        # Dims
+        # Setup entry
+        local_entry: SymbolTableElement = SymbolTableElement(temp_var_name, "Temp Var", p_node.var_type)
+        p_node.symb_table.insert(local_entry)
 
     def visit_not_node(self, p_node: fn.NotNode):
         # Propagate down
