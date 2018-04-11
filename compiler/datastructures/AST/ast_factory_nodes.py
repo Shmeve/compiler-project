@@ -13,8 +13,14 @@ class Node(metaclass=abc.ABCMeta):
         self.item: Token = item
         self.node_type: str = type
 
+        # TypeCheckingVisitor
+        self.var_type: str = ""
+
         # SymbolTableCreationVisitor
-        self.symbTable: SymbolTable = None
+        self.symb_table: SymbolTable = None
+
+        # Code Generation
+        self.moon_var_name: str = ""
 
         if self.leftmost_sibling is None:
             self.leftmost_sibling = self

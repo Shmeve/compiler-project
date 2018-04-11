@@ -4,82 +4,61 @@ from compiler.datastructures.symbol_table import SymbolTable, SymbolTableElement
 
 
 class SymbolTableCreationVisitor(Visitor):
+    def __init__(self):
+        self.temp_var_num = 0
+
+    def get_temp_var_name(self) -> str:
+        self.temp_var_num += 1
+        return "t" + str(self.temp_var_num)
+
+    def propagate(self, p_node: fn.Node):
+        # Propagate down
+        if p_node.leftmost_child is not None:
+            pointer: fn.Node = p_node.leftmost_child
+            pointer.symb_table = p_node.symb_table
+            pointer.accept(self)
+
+            while pointer.right_sibling is not None:
+                pointer = pointer.right_sibling
+                pointer.symb_table = p_node.symb_table
+                pointer.accept(self)
+
     def visit_null_node_node(self, p_node: fn.ConcreteNullNode):
         pass
 
     def visit_prog_node(self, p_node: fn.ProgNode):
-        p_node.symbTable = SymbolTable("Global")
+        p_node.symb_table = SymbolTable("Global")
 
-        if p_node.leftmost_child is not None:
-            pointer: fn.Node = p_node.leftmost_child
-            pointer.symbTable = p_node.symbTable
-            pointer.accept(self)
-
-            while pointer.right_sibling is not None:
-                pointer = pointer.right_sibling
-                pointer.symbTable = p_node.symbTable
-                pointer.accept(self)
+        self.propagate(p_node)
 
     def visit_class_list_node(self, p_node: fn.ClassListNode):
-        if p_node.leftmost_child is not None:
-            pointer: fn.Node = p_node.leftmost_child
-            pointer.symbTable = p_node.symbTable
-            pointer.accept(self)
-
-            while pointer.right_sibling is not None:
-                pointer = pointer.right_sibling
-                pointer.symbTable = p_node.symbTable
-                pointer.accept(self)
+        self.propagate(p_node)
 
     def visit_func_def_list_node(self, p_node: fn.FuncDefListNode):
-        if p_node.leftmost_child is not None:
-            pointer: fn.Node = p_node.leftmost_child
-            pointer.symbTable = p_node.symbTable
-            pointer.accept(self)
-
-            while pointer.right_sibling is not None:
-                pointer = pointer.right_sibling
-                pointer.symbTable = p_node.symbTable
-                pointer.accept(self)
+        self.propagate(p_node)
 
     def visit_stat_block_node(self, p_node: fn.StatBlockNode):
         if p_node.parent.node_type == "prog":
             local_table: SymbolTable = SymbolTable(table_name="Program", symbols=[],
-                                                   table_level=1, parent_table=p_node.symbTable)
+                                                   table_level=1, parent_table=p_node.symb_table)
             local_entry: SymbolTableElement = SymbolTableElement("program", "function", "", local_table)
-            p_node.symbTable.insert(local_entry)
-            p_node.symbTable = local_table
+            p_node.symb_table.insert(local_entry)
+            p_node.symb_table = local_table
 
-        if p_node.leftmost_child is not None:
-            pointer: fn.Node = p_node.leftmost_child
-            pointer.symbTable = p_node.symbTable
-            pointer.accept(self)
-
-            while pointer.right_sibling is not None:
-                pointer = pointer.right_sibling
-                pointer.symbTable = p_node.symbTable
-                pointer.accept(self)
+        self.propagate(p_node)
 
     def visit_class_decl_node(self, p_node: fn.ClassDeclNode):
         class_name: str = p_node.leftmost_child.item.lexeme
         local_table: SymbolTable = SymbolTable(table_name=class_name,
                                                symbols=[],
-                                               table_level=p_node.symbTable.table_level+1,
+                                               table_level=p_node.symb_table.table_level + 1,
                                                table_size=0,
-                                               parent_table=p_node.symbTable)
+                                               parent_table=p_node.symb_table)
         local_entry: SymbolTableElement = SymbolTableElement(class_name, "class", "", local_table)
-        p_node.symbTable.insert(local_entry)
-        p_node.symbTable = local_table
+        p_node.symb_table.insert(local_entry)
+        p_node.symb_table = local_table
 
-        if p_node.leftmost_child is not None:
-            pointer: fn.Node = p_node.leftmost_child
-            pointer.symbTable = p_node.symbTable
-            pointer.accept(self)
-
-            while pointer.right_sibling is not None:
-                pointer = pointer.right_sibling
-                pointer.symbTable = p_node.symbTable
-                pointer.accept(self)
+        self.propagate(p_node)
 
     def visit_func_def_node(self, p_node: fn.FuncDefNode):
         function_type: str = p_node.leftmost_child.item.lexeme
@@ -137,28 +116,20 @@ class SymbolTableCreationVisitor(Visitor):
                                                              function_type+': '+function_param_types,
                                                              local_table)
         if class_function:
-            inserting_table: SymbolTable = p_node.symbTable.search(function_scope).element_link
+            inserting_table: SymbolTable = p_node.symb_table.search(function_scope).element_link
             inserting_element: SymbolTableElement = inserting_table.search(function_name)
             inserting_element.element_link = local_table
             local_table.parent_table = inserting_table
             local_table.table_level = inserting_table.table_level+1
         else:
-            p_node.symbTable.insert(local_entry)
-            local_table.parent_table = p_node.symbTable
-            local_table.table_level = p_node.symbTable.table_level+1
+            p_node.symb_table.insert(local_entry)
+            local_table.parent_table = p_node.symb_table
+            local_table.table_level = p_node.symb_table.table_level + 1
 
-        p_node.symbTable = local_table
+        p_node.symb_table = local_table
 
         # Propagate down
-        if p_node.leftmost_child is not None:
-            pointer: fn.Node = p_node.leftmost_child
-            pointer.symbTable = p_node.symbTable
-            pointer.accept(self)
-
-            while pointer.right_sibling is not None:
-                pointer = pointer.right_sibling
-                pointer.symbTable = p_node.symbTable
-                pointer.accept(self)
+        self.propagate(p_node)
 
     def visit_id_node(self, p_node: fn.IdNode):
         pass
@@ -167,19 +138,12 @@ class SymbolTableCreationVisitor(Visitor):
         pass
 
     def visit_inher_list_node(self, p_node: fn.InherListNode):
-        pass
+        # Propagate down
+        self.propagate(p_node)
 
     def visit_memb_list_node(self, p_node: fn.MembListNode):
         # Propagate down
-        if p_node.leftmost_child is not None:
-            pointer: fn.Node = p_node.leftmost_child
-            pointer.symbTable = p_node.symbTable
-            pointer.accept(self)
-
-            while pointer.right_sibling is not None:
-                pointer = pointer.right_sibling
-                pointer.symbTable = p_node.symbTable
-                pointer.accept(self)
+        self.propagate(p_node)
 
     def visit_func_decl_node(self, p_node: fn.FuncDeclNode):
         func_type: str = p_node.leftmost_child.item.lexeme
@@ -231,33 +195,18 @@ class SymbolTableCreationVisitor(Visitor):
 
         # Create entry
         local_entry: SymbolTableElement = SymbolTableElement(func_id, "function", func_type)
-        p_node.symbTable.insert(local_entry)
+        p_node.symb_table.insert(local_entry)
 
         # Propagate down
-        if p_node.leftmost_child is not None:
-            pointer: fn.Node = p_node.leftmost_child
-            pointer.symbTable = p_node.symbTable
-            pointer.accept(self)
-
-            while pointer.right_sibling is not None:
-                pointer = pointer.right_sibling
-                pointer.symbTable = p_node.symbTable
-                pointer.accept(self)
+        self.propagate(p_node)
 
     def visit_f_param_node(self, p_node: fn.FparamNode):
-        pass
+        # Propagate down
+        self.propagate(p_node)
 
     def visit_var_decl_node(self, p_node: fn.VarDeclNode):
         # Propagate downwards first
-        if p_node.leftmost_child is not None:
-            pointer: fn.Node = p_node.leftmost_child
-            pointer.symbTable = p_node.symbTable
-            pointer.accept(self)
-
-            while pointer.right_sibling is not None:
-                pointer = pointer.right_sibling
-                pointer.symbTable = p_node.symbTable
-                pointer.accept(self)
+        self.propagate(p_node)
 
         # Process node
         var_type: str = p_node.leftmost_child.item.lexeme
@@ -280,7 +229,7 @@ class SymbolTableCreationVisitor(Visitor):
 
         # Create entry
         local_entry: SymbolTableElement = SymbolTableElement(var_id, "variable", var_type)
-        p_node.symbTable.insert(local_entry)
+        p_node.symb_table.insert(local_entry)
 
     def visit_f_param_list_node(self, p_node: fn.FparamListNode):
         pass
@@ -292,52 +241,82 @@ class SymbolTableCreationVisitor(Visitor):
         pass
 
     def visit_if_stat_node(self, p_node: fn.IfStatNode):
-        pass
+        # Propagate down
+        self.propagate(p_node)
 
     def visit_assign_stat_node(self, p_node: fn.AssignStatNode):
-        pass
+        # Propagate down
+        self.propagate(p_node)
 
     def visit_for_stat_node(self, p_node: fn.ForStatNode):
-        pass
+        # Propagate down
+        self.propagate(p_node)
 
     def visit_get_stat_node(self, p_node: fn.GetStatNode):
-        pass
+        # Propagate down
+        self.propagate(p_node)
 
     def visit_put_stat_node(self, p_node: fn.PutStatNode):
-        pass
+        # Propagate down
+        self.propagate(p_node)
 
     def visit_return_stat_node(self, p_node: fn.ReturnStatNode):
-        pass
+        # Propagate down
+        self.propagate(p_node)
 
     def visit_add_op_node(self, p_node: fn.AddOpNode):
-        pass
+        # Propagate down
+        self.propagate(p_node)
+
+        # Temp var
+        temp_var_name = self.get_temp_var_name()
+        p_node.moon_var_name = temp_var_name
+
+        # Setup entry
+        local_entry: SymbolTableElement = SymbolTableElement(temp_var_name, "Temp Var", p_node.var_type)
+        p_node.symb_table.insert(local_entry)
 
     def visit_rel_expr_node(self, p_node: fn.RelExprNode):
-        pass
+        # Propagate down
+        self.propagate(p_node)
 
     def visit_rel_op_node(self, p_node: fn.RelOpNode):
         pass
 
     def visit_mult_op_node(self, p_node: fn.MultOpNode):
-        pass
+        # Propagate down
+        self.propagate(p_node)
+
+        # Temp var
+        temp_var_name = self.get_temp_var_name()
+        p_node.moon_var_name = temp_var_name
+
+        # Dims
 
     def visit_not_node(self, p_node: fn.NotNode):
-        pass
+        # Propagate down
+        self.propagate(p_node)
 
     def visit_sign_node(self, p_node: fn.SignNode):
-        pass
+        # Propagate down
+        self.propagate(p_node)
 
     def visit_var_node(self, p_node: fn.VarNode):
-        pass
+        # Propagate down
+        self.propagate(p_node)
 
     def visit_data_member_node(self, p_node: fn.DataMemberNode):
-        pass
+        # Propagate down
+        self.propagate(p_node)
 
     def visit_f_call_node(self, p_node: fn.FCallNode):
-        pass
+        # Propagate down
+        self.propagate(p_node)
 
     def visit_index_list_node(self, p_node: fn.IndexListNode):
-        pass
+        # Propagate down
+        self.propagate(p_node)
 
     def visit_a_params_node(self, p_node: fn.AParamsNode):
-        pass
+        # Propagate down
+        self.propagate(p_node)
