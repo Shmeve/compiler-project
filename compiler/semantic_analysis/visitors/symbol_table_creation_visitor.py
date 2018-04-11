@@ -8,10 +8,21 @@ class SymbolTableCreationVisitor(Visitor):
         self.temp_var_num = 0
 
     def get_temp_var_name(self) -> str:
+        """
+        Generates a unique string to be used as a temporary variable id in machine code
+
+        :return: str
+        """
         self.temp_var_num += 1
         return "t" + str(self.temp_var_num)
 
-    def propagate(self, p_node: fn.Node):
+    def propagate(self, p_node: fn.Node) -> None:
+        """
+        Continues AST traversal / acceptance of current visitor
+
+        :param p_node: Starting node for propagation
+        :return: None
+        """
         # Propagate down
         if p_node.leftmost_child is not None:
             pointer: fn.Node = p_node.leftmost_child
@@ -201,6 +212,29 @@ class SymbolTableCreationVisitor(Visitor):
         self.propagate(p_node)
 
     def visit_f_param_node(self, p_node: fn.FparamNode):
+        if p_node.parent.parent.node_type == "funcDef":
+            param_type: str = p_node.leftmost_child.item.lexeme
+            param_id: str = p_node.leftmost_child.right_sibling.item.lexeme
+            param_dim_list_node: fn.Node = p_node.leftmost_child.right_sibling.right_sibling
+            param_dim_list_str: str = ""
+
+            # Build dim list string
+            if param_dim_list_node.leftmost_child is not None:
+                p = param_dim_list_node.leftmost_child
+                param_dim_list_str += '[' + p.item.lexeme + ']'
+
+                while p.right_sibling is not None:
+                    p = p.right_sibling
+                    param_dim_list_str += '[' + p.item.lexeme + ']'
+
+                param_type += param_dim_list_str
+
+            # Build parameter entry
+            local_entry: SymbolTableElement = SymbolTableElement(param_id, "Parameter", param_type)
+
+            # Add entry
+            p_node.symb_table.insert(local_entry)
+
         # Propagate down
         self.propagate(p_node)
 
@@ -232,7 +266,8 @@ class SymbolTableCreationVisitor(Visitor):
         p_node.symb_table.insert(local_entry)
 
     def visit_f_param_list_node(self, p_node: fn.FparamListNode):
-        pass
+        # Propagate down
+        self.propagate(p_node)
 
     def visit_dim_list_node(self, p_node: fn.DimListNode):
         pass

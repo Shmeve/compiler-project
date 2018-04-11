@@ -21,7 +21,7 @@ int Utility::findMax(int array[100]) {
     return (maxValue);
 };
 
-int Utility::findMin(int array[100], float array[10]) {
+int Utility::findMin(int array[100]) {
     int minValue;
     int idx;
     minValue = array[100];

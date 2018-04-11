@@ -34,4 +34,8 @@ else:
 print("----------\nSemantic Analysis\n----------")
 sa: SemanticAnalyzer = SemanticAnalyzer(p.ast_root)
 sa.analyze()
-sa.output_tables(sa.global_table)
+
+if args_len >= 3:
+    sa.log_results(sys.argv[2], sa.global_table)
+else:
+    sa.log_results(root_node=sa.global_table)

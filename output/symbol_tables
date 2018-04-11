@@ -1,0 +1,59 @@
++Global------------+----------+---------+------+
+| Name             | Kind     | Type    | Link |
++------------------+----------+---------+------+
+| InheritedUtility | class    |         | ✔    |
+| Utility          | class    |         | ✔    |
+| randomize        | function | float:  | ✔    |
+| program          | function |         | ✔    |
++------------------+----------+---------+------+
+	+InheritedUtility----+------+------+
+	| Name    | Kind     | Type | Link |
+	+---------+----------+------+------+
+	| member1 | variable | int  | ⨯    |
+	+---------+----------+------+------+
+	+Utility--+----------+------------------------+------+
+	| Name    | Kind     | Type                   | Link |
+	+---------+----------+------------------------+------+
+	| var1    | variable | x[4][5][7][8][9][1][0] | ⨯    |
+	| var2    | variable | float                  | ⨯    |
+	| findMax | function | int: int[100],         | ✔    |
+	| findMin | function | int: int[100],         | ✔    |
+	+---------+----------+------------------------+------+
+		+Utility::findMax------+----------+------+
+		| Name     | Kind      | Type     | Link |
+		+----------+-----------+----------+------+
+		| array    | Parameter | int[100] | ⨯    |
+		| maxValue | variable  | int      | ⨯    |
+		| idx      | variable  | int      | ⨯    |
+		+----------+-----------+----------+------+
+		+Utility::findMin------+----------+------+
+		| Name     | Kind      | Type     | Link |
+		+----------+-----------+----------+------+
+		| array    | Parameter | int[100] | ⨯    |
+		| minValue | variable  | int      | ⨯    |
+		| idx      | variable  | int      | ⨯    |
+		| t1       | Temp Var  |          | ⨯    |
+		| t3       | Temp Var  |          | ⨯    |
+		| t4       | Temp Var  |          | ⨯    |
+		+----------+-----------+----------+------+
+	+randomize---------+-------+------+
+	| Name  | Kind     | Type  | Link |
+	+-------+----------+-------+------+
+	| value | variable | float | ⨯    |
+	| t6    | Temp Var |       | ⨯    |
+	| t9    | Temp Var |       | ⨯    |
+	| t10   | Temp Var |       | ⨯    |
+	| t11   | Temp Var |       | ⨯    |
+	+-------+----------+-------+------+
+	+Program-------+----------+---------------------+------+
+	| Name         | Kind     | Type                | Link |
+	+--------------+----------+---------------------+------+
+	| sample       | variable | int[100]            | ⨯    |
+	| idx          | variable | int                 | ⨯    |
+	| maxValue     | variable | int                 | ⨯    |
+	| minValue     | variable | int                 | ⨯    |
+	| utility      | variable | Utility             | ⨯    |
+	| arrayUtility | variable | Utility[2][3][6][7] | ⨯    |
+	| t13          | Temp Var |                     | ⨯    |
+	| t15          | Temp Var |                     | ⨯    |
+	+--------------+----------+---------------------+------+
