@@ -34,3 +34,4 @@ else:
 print("----------\nSemantic Analysis\n----------")
 sa: SemanticAnalyzer = SemanticAnalyzer(p.ast_root)
 sa.analyze()
+sa.output_tables(sa.global_table)
