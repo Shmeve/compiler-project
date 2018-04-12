@@ -20,6 +20,9 @@ class Node(metaclass=abc.ABCMeta):
         self.symb_table: SymbolTable = None
 
         # Code Generation
+        self.local_register: str = ""
+        self.left_child_register: str = ""
+        self.right_child_register: str = ""
         self.moon_var_name: str = ""
 
         if self.leftmost_sibling is None:

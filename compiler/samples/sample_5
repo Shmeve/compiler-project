@@ -1,0 +1,17 @@
+class Utility {
+    int a();
+};
+
+int Utility::a() {
+    int x;
+    x = 2;
+    return x;
+};
+
+program {
+    Utility b;
+    int c;
+    c = b.a();
+
+    put(c);
+};
