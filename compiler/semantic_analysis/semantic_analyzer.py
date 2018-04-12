@@ -1,5 +1,6 @@
 from compiler.datastructures.AST import ast_factory_nodes as fn
 from compiler.semantic_analysis.visitors.symbol_table_creation_visitor import SymbolTableCreationVisitor
+from compiler.semantic_analysis.visitors.compute_mem_size_visitor import ComputerMemSizeVisitor
 from compiler.semantic_analysis.visitors.code_generation_visitor import CodeGenerationVisitor
 from compiler.datastructures.symbol_table import SymbolTable
 from terminaltables import AsciiTable
@@ -16,13 +17,17 @@ class SemanticAnalyzer:
         """
         # Init visitors
         table_creation_visitor = SymbolTableCreationVisitor()
+        mem_size_visitor = ComputerMemSizeVisitor()
         code_generation_visitor = CodeGenerationVisitor()
 
         # Create Tables
         self.ast_root_node.accept(table_creation_visitor)
         self.global_table = self.ast_root_node.symb_table
+        # Compute memory sizes
+        self.ast_root_node.accept(mem_size_visitor)
         # Generate Code
         self.ast_root_node.accept(code_generation_visitor)
+        print(code_generation_visitor.moon_exec_code)
 
     def output_tables(self, root_table: SymbolTable) -> str:
         """
@@ -31,7 +36,7 @@ class SemanticAnalyzer:
         :param root_table: Root symbol table for current iteration
         :return: str
         """
-        title: str = root_table.name
+        title: str = root_table.name + '  |  ' + str(root_table.table_size)
         data = [
             ['Name', 'Kind', 'Type', 'Link']
         ]

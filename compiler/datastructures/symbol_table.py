@@ -4,6 +4,8 @@ class SymbolTableElement:
         self.element_kind = element_kind
         self.element_type = element_type
         self.element_link: SymbolTable = element_link
+        self.offset: int = 0
+        self.size: int = 0
 
 
 class SymbolTable:
@@ -22,7 +24,6 @@ class SymbolTable:
         :return: SymbolTableElement
         """
         self.symbols.append(element)
-        self.table_size += 1
 
     def search(self, search_element_name: str) -> SymbolTableElement:
         """

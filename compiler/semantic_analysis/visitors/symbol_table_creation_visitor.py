@@ -238,6 +238,7 @@ class SymbolTableCreationVisitor(Visitor):
 
             # Add entry
             p_node.symb_table.insert(local_entry)
+            p_node.var_type = param_type
 
         # Propagate down
         self.propagate(p_node)
@@ -267,6 +268,8 @@ class SymbolTableCreationVisitor(Visitor):
 
         # Create entry
         local_entry: SymbolTableElement = SymbolTableElement(var_id, "variable", var_type)
+        p_node.var_type = var_type
+        p_node.moon_var_name = var_id
         p_node.symb_table.insert(local_entry)
 
     def visit_f_param_list_node(self, p_node: fn.FparamListNode):
