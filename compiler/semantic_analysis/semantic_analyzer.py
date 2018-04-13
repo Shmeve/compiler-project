@@ -27,7 +27,10 @@ class SemanticAnalyzer:
         self.ast_root_node.accept(mem_size_visitor)
         # Generate Code
         self.ast_root_node.accept(code_generation_visitor)
-        print(code_generation_visitor.moon_exec_code)
+
+        with open('output/compiled.m', 'w') as f:
+            f.write(code_generation_visitor.moon_exec_code)
+            f.write(code_generation_visitor.moon_data_code)
 
     def output_tables(self, root_table: SymbolTable) -> str:
         """

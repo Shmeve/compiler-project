@@ -211,6 +211,7 @@ class SymbolTableCreationVisitor(Visitor):
         # Create entry
         local_entry: SymbolTableElement = SymbolTableElement(func_id, "function", func_type)
         p_node.symb_table.insert(local_entry)
+        p_node.symb_table_element = local_entry
 
         # Propagate down
         self.propagate(p_node)
@@ -238,6 +239,7 @@ class SymbolTableCreationVisitor(Visitor):
 
             # Add entry
             p_node.symb_table.insert(local_entry)
+            p_node.symb_table_element = local_entry
             p_node.var_type = param_type
 
         # Propagate down
@@ -271,6 +273,7 @@ class SymbolTableCreationVisitor(Visitor):
         p_node.var_type = var_type
         p_node.moon_var_name = var_id
         p_node.symb_table.insert(local_entry)
+        p_node.symb_table_element = local_entry
 
     def visit_f_param_list_node(self, p_node: fn.FparamListNode):
         # Propagate down
@@ -302,6 +305,7 @@ class SymbolTableCreationVisitor(Visitor):
 
         # Setup entry
         local_entry: SymbolTableElement = SymbolTableElement(temp_var_name, "Temp Var", temp_var_type)
+        p_node.symb_table_element = local_entry
         p_node.symb_table.insert(local_entry)
 
     def visit_if_stat_node(self, p_node: fn.IfStatNode):
@@ -339,6 +343,7 @@ class SymbolTableCreationVisitor(Visitor):
         # Setup entry
         local_entry: SymbolTableElement = SymbolTableElement(temp_var_name, "Temp Var", p_node.var_type)
         p_node.symb_table.insert(local_entry)
+        p_node.symb_table_element = local_entry
 
     def visit_rel_expr_node(self, p_node: fn.RelExprNode):
         # Propagate down
@@ -359,6 +364,7 @@ class SymbolTableCreationVisitor(Visitor):
         # Setup entry
         local_entry: SymbolTableElement = SymbolTableElement(temp_var_name, "Temp Var", p_node.var_type)
         p_node.symb_table.insert(local_entry)
+        p_node.symb_table_element = local_entry
 
     def visit_not_node(self, p_node: fn.NotNode):
         # Propagate down
@@ -372,13 +378,41 @@ class SymbolTableCreationVisitor(Visitor):
         # Propagate down
         self.propagate(p_node)
 
+        # Temp var
+        temp_var_name = self.get_temp_var_name()
+        p_node.moon_var_name = temp_var_name
+        temp_var_type = p_node.leftmost_child.var_type
+
+        local_entry: SymbolTableElement = SymbolTableElement(temp_var_name, "temp_var", temp_var_type)
+        p_node.symb_table.insert(local_entry)
+        p_node.symb_table_element = local_entry
+
+
     def visit_data_member_node(self, p_node: fn.DataMemberNode):
         # Propagate down
         self.propagate(p_node)
 
+        # Temp var
+        temp_var_name = self.get_temp_var_name()
+        p_node.moon_var_name = temp_var_name
+        temp_var_type = p_node.var_type
+
+        local_entry: SymbolTableElement = SymbolTableElement(temp_var_name, "temp_var", temp_var_type)
+        p_node.symb_table.insert(local_entry)
+        p_node.symb_table_element = local_entry
+
     def visit_f_call_node(self, p_node: fn.FCallNode):
         # Propagate down
         self.propagate(p_node)
+
+        # Temp var
+        temp_var_name = self.get_temp_var_name()
+        p_node.moon_var_name = temp_var_name
+        temp_var_type = p_node.var_type
+
+        local_entry: SymbolTableElement = SymbolTableElement(temp_var_name, "f_call", temp_var_type)
+        p_node.symb_table.insert(local_entry)
+        p_node.symb_table_element = local_entry
 
     def visit_index_list_node(self, p_node: fn.IndexListNode):
         # Propagate down

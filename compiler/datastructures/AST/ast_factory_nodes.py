@@ -1,7 +1,7 @@
 import abc
 from compiler.scanner.token import Token
 from compiler.semantic_analysis.visitor import Visitor
-from compiler.datastructures.symbol_table import SymbolTable
+from compiler.datastructures.symbol_table import SymbolTable, SymbolTableElement
 
 
 class Node(metaclass=abc.ABCMeta):
@@ -18,6 +18,7 @@ class Node(metaclass=abc.ABCMeta):
 
         # SymbolTableCreationVisitor
         self.symb_table: SymbolTable = None
+        self.symb_table_element: SymbolTableElement = None
 
         # Code Generation
         self.local_register: str = ""
