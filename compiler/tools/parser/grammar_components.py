@@ -429,7 +429,7 @@ predict_set = {
         "RHS": ["EPSILON"]},
     "90": {
         "LHS": "aParamsTail",
-        "RHS": ["T_R_COMMA", "expr", "aParamsTail"]},
+        "RHS": ["T_R_COMMA", "expr", "@2,1", "aParamsTail"]},
     "91": {
         "LHS": "aParamsTail",
         "RHS": ["EPSILON"]},
