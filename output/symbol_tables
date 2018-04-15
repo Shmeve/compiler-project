@@ -1,59 +1,36 @@
-+Global------------+----------+---------+------+
-| Name             | Kind     | Type    | Link |
-+------------------+----------+---------+------+
-| InheritedUtility | class    |         | ✔    |
-| Utility          | class    |         | ✔    |
-| randomize        | function | float:  | ✔    |
-| program          | function |         | ✔    |
-+------------------+----------+---------+------+
-	+InheritedUtility----+------+------+
-	| Name    | Kind     | Type | Link |
-	+---------+----------+------+------+
-	| member1 | variable | int  | ⨯    |
-	+---------+----------+------+------+
-	+Utility--+----------+------------------------+------+
-	| Name    | Kind     | Type                   | Link |
-	+---------+----------+------------------------+------+
-	| var1    | variable | x[4][5][7][8][9][1][0] | ⨯    |
-	| var2    | variable | float                  | ⨯    |
-	| findMax | function | int: int[100],         | ✔    |
-	| findMin | function | int: int[100],         | ✔    |
-	+---------+----------+------------------------+------+
-		+Utility::findMax------+----------+------+
-		| Name     | Kind      | Type     | Link |
-		+----------+-----------+----------+------+
-		| array    | Parameter | int[100] | ⨯    |
-		| maxValue | variable  | int      | ⨯    |
-		| idx      | variable  | int      | ⨯    |
-		+----------+-----------+----------+------+
-		+Utility::findMin------+----------+------+
-		| Name     | Kind      | Type     | Link |
-		+----------+-----------+----------+------+
-		| array    | Parameter | int[100] | ⨯    |
-		| minValue | variable  | int      | ⨯    |
-		| idx      | variable  | int      | ⨯    |
-		| t1       | Temp Var  |          | ⨯    |
-		| t3       | Temp Var  |          | ⨯    |
-		| t4       | Temp Var  |          | ⨯    |
-		+----------+-----------+----------+------+
-	+randomize---------+-------+------+
-	| Name  | Kind     | Type  | Link |
-	+-------+----------+-------+------+
-	| value | variable | float | ⨯    |
-	| t6    | Temp Var |       | ⨯    |
-	| t9    | Temp Var |       | ⨯    |
-	| t10   | Temp Var |       | ⨯    |
-	| t11   | Temp Var |       | ⨯    |
-	+-------+----------+-------+------+
-	+Program-------+----------+---------------------+------+
-	| Name         | Kind     | Type                | Link |
-	+--------------+----------+---------------------+------+
-	| sample       | variable | int[100]            | ⨯    |
-	| idx          | variable | int                 | ⨯    |
-	| maxValue     | variable | int                 | ⨯    |
-	| minValue     | variable | int                 | ⨯    |
-	| utility      | variable | Utility             | ⨯    |
-	| arrayUtility | variable | Utility[2][3][6][7] | ⨯    |
-	| t13          | Temp Var |                     | ⨯    |
-	| t15          | Temp Var |                     | ⨯    |
-	+--------------+----------+---------------------+------+
++Global  |  0--------+-------+--------+------+
+| Name    | Kind     | Type  | Offset | Link |
++---------+----------+-------+--------+------+
+| addfunc | function | int:  | 0      | ✔    |
+| program | function |       | 0      | ✔    |
++---------+----------+-------+--------+------+
+	+addfunc  |  -16------+------+--------+------+
+	| Name | Kind         | Type | Offset | Link |
+	+------+--------------+------+--------+------+
+	| c    | variable     | int  | -12    | ⨯    |
+	| t1   | data_member  | int  | -12    | ⨯    |
+	| t2   | var          | int  | -12    | ⨯    |
+	| t3   | Temp Var num | int  | -16    | ⨯    |
+	| t4   | data_member  | int  | -16    | ⨯    |
+	| t5   | var          | int  | -16    | ⨯    |
+	+------+--------------+------+--------+------+
+	+Program  |  -32------+-------+--------+------+
+	| Name | Kind         | Type  | Offset | Link |
+	+------+--------------+-------+--------+------+
+	| x    | variable     | int   | -4     | ⨯    |
+	| y    | variable     | int   | -8     | ⨯    |
+	| t6   | data_member  | int   | -8     | ⨯    |
+	| t7   | var          | int   | -8     | ⨯    |
+	| t8   | f_call       | int:  | -12    | ⨯    |
+	| t9   | var          | int:  | -12    | ⨯    |
+	| t10  | Temp Var num | int   | -16    | ⨯    |
+	| t11  | Temp Var add | int:  | -20    | ⨯    |
+	| t12  | data_member  | int   | -20    | ⨯    |
+	| t13  | var          | int   | -20    | ⨯    |
+	| t14  | f_call       | int:  | -24    | ⨯    |
+	| t15  | var          | int:  | -24    | ⨯    |
+	| t16  | Temp Var num | int   | -28    | ⨯    |
+	| t17  | Temp Var add | int:  | -32    | ⨯    |
+	| t18  | data_member  | int   | -32    | ⨯    |
+	| t19  | var          | int   | -32    | ⨯    |
+	+------+--------------+-------+--------+------+

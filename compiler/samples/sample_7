@@ -1,0 +1,5 @@
+program {
+int x;
+x = 10;
+put(x);
+};

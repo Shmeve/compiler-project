@@ -18,9 +18,9 @@ class ComputerMemSizeVisitor(Visitor):
         dims = self.get_dims(p_node)
         raw_type = p_node.var_type.split('[', 1)[0]
 
-        if raw_type == "int":
+        if raw_type == "int" or "int:":
             size = 4
-        elif raw_type == "float":
+        elif raw_type == "float" or "float:":
             size = 8
 
         # Multiply by array dimensions
@@ -124,6 +124,8 @@ class ComputerMemSizeVisitor(Visitor):
 
     def visit_f_param_node(self, p_node: fn.FparamNode):
         self.propagate(p_node)
+
+        p_node.symb_table.search(p_node.moon_var_name).size = self.size_of_entry(p_node)
 
     def visit_var_decl_node(self, p_node: fn.VarDeclNode):
         self.propagate(p_node)

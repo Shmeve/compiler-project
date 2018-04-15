@@ -453,9 +453,9 @@ class Parser:
             search_queue.append(GraphvizNode(pointer, str(count)))
 
             if pointer.item is not None:
-                dot.node(str(count), pointer.node_type + "\n" + pointer.item.token + "\n" + pointer.item.lexeme)
+                dot.node(str(count), pointer.node_type + "\n" + pointer.item.token + "\n" + pointer.item.lexeme + "\n" + pointer.moon_var_name)
             else:
-                dot.node(str(count), pointer.node_type)
+                dot.node(str(count), pointer.node_type + "\n" + pointer.moon_var_name)
 
             dot.edge(parent_id, str(count))
 
@@ -466,9 +466,9 @@ class Parser:
                 search_queue.append(GraphvizNode(pointer, str(count)))
 
                 if pointer.item is not None:
-                    dot.node(str(count), pointer.node_type + "\n" + pointer.item.token + "\n" + pointer.item.lexeme)
+                    dot.node(str(count), pointer.node_type + "\n" + pointer.item.token + "\n" + pointer.item.lexeme + "\n" + pointer.moon_var_name)
                 else:
-                    dot.node(str(count), pointer.node_type)
+                    dot.node(str(count), pointer.node_type + "\n" + pointer.moon_var_name)
 
                 dot.edge(parent_id, str(count))
 

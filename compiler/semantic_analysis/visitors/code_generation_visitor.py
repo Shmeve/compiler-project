@@ -1,5 +1,6 @@
 from compiler.semantic_analysis.visitor import Visitor
 from compiler.datastructures.AST import ast_factory_nodes as fn
+from compiler.datastructures.symbol_table import SymbolTable
 
 
 class CodeGenerationVisitor(Visitor):
@@ -60,9 +61,23 @@ class CodeGenerationVisitor(Visitor):
         self.propagate(p_node)
 
     def visit_func_def_node(self, p_node: fn.FuncDefNode):
-        # TODO: implement func_def
+        # TODO: func_def - Unconfirmed
+        # Locate id node
+        local_id_node: fn.Node
+
+        if p_node.leftmost_child.right_sibling.right_sibling.node_type == "ConcreteNull":
+            local_id_node = p_node.leftmost_child.right_sibling
+        else:
+            local_id_node = p_node.leftmost_child.right_sibling.right_sibling
+
+        self.moon_exec_code += self.moon_code_indent + "% processing function definition: " + local_id_node.item.lexeme + "\n"
+        self.moon_exec_code += self.moon_code_indent + local_id_node.item.lexeme + " sw -4(r14),r15\n"
+
         # Propagate down
         self.propagate(p_node)
+
+        self.moon_exec_code += self.moon_code_indent + "lw r15, -4(r14)\n"
+        self.moon_exec_code += self.moon_code_indent + "jr r15\n"
 
     def visit_id_node(self, p_node: fn.IdNode):
         # Propagate down
@@ -120,7 +135,6 @@ class CodeGenerationVisitor(Visitor):
         self.propagate(p_node)
 
     def visit_assign_stat_node(self, p_node: fn.AssignStatNode):
-        # TODO: implement assign_stat
         # Propagate down
         self.propagate(p_node)
 
@@ -128,7 +142,7 @@ class CodeGenerationVisitor(Visitor):
         local_reg2: str = self.register_pool.pop()
         local_reg3: str = self.register_pool.pop()
 
-        self.moon_exec_code += self.moon_code_indent + "% processing: " + p_node.leftmost_child.symb_table_element.element_name + " := " + p_node.leftmost_child.right_sibling.moon_var_name + "\n"
+        self.moon_exec_code += self.moon_code_indent + "% processing: " + p_node.leftmost_child.moon_var_name + " := " + p_node.leftmost_child.right_sibling.moon_var_name + "\n"
         self.moon_exec_code += self.moon_code_indent + "lw " + local_reg2 + "," + \
                                str(p_node.symb_table.search(p_node.leftmost_child.right_sibling.moon_var_name).offset) + "(r14)\n"
         self.moon_exec_code += self.moon_code_indent + "sw " + str(p_node.symb_table.search(p_node.leftmost_child.moon_var_name).offset) + "(r14)," + local_reg2 + "\n"
@@ -175,11 +189,19 @@ class CodeGenerationVisitor(Visitor):
 
     def visit_return_stat_node(self, p_node: fn.ReturnStatNode):
         # TODO: implement return_stat
+        local_reg1 = self.register_pool.pop()
+
         # Propagate down
         self.propagate(p_node)
 
+        self.moon_exec_code += self.moon_code_indent + "% processing: return(" + p_node.leftmost_child.moon_var_name + ")\n"
+        self.moon_exec_code += self.moon_code_indent + "lw " + local_reg1 + "," + \
+                               str(p_node.symb_table.search(p_node.leftmost_child.moon_var_name).offset) + "(r14)\n"
+        self.moon_exec_code += self.moon_code_indent + "sw " + "0(r14)," + local_reg1 + "\n"
+
+        self.register_pool.append(local_reg1)
+
     def visit_add_op_node(self, p_node: fn.AddOpNode):
-        # TODO: implement add_op
         # Propagate down
         self.propagate(p_node)
 
@@ -217,9 +239,34 @@ class CodeGenerationVisitor(Visitor):
         self.propagate(p_node)
 
     def visit_mult_op_node(self, p_node: fn.MultOpNode):
-        # TODO: implement mult_op
         # Propagate down
         self.propagate(p_node)
+
+        local_reg1: str = self.register_pool.pop()
+        local_reg2: str = self.register_pool.pop()
+        local_reg3: str = self.register_pool.pop()
+        local_reg4: str = self.register_pool.pop()
+
+        # Generate Code
+        self.moon_exec_code += self.moon_code_indent + '% processing: ' + p_node.moon_var_name + " := " + p_node.leftmost_child.moon_var_name + \
+                               " * " + p_node.leftmost_child.right_sibling.moon_var_name + "\n"
+        # Load to registers
+        self.moon_exec_code += self.moon_code_indent + "lw " + local_reg2 + "," + \
+                               str(p_node.symb_table.search(p_node.leftmost_child.moon_var_name).offset) + "(r14)\n"
+        self.moon_exec_code += self.moon_code_indent + "lw " + local_reg3 + "," + \
+                               str(p_node.symb_table.search(p_node.leftmost_child.right_sibling.moon_var_name).offset) + "(r14)\n"
+
+        if p_node.item.token == "T_R_MULTIPLY":
+            self.moon_exec_code += self.moon_code_indent + "mul " + local_reg4 + "," + local_reg2 + "," + local_reg3 + "\n"
+        else:
+            self.moon_exec_code += self.moon_code_indent + "div " + local_reg4 + "," + local_reg2 + "," + local_reg3 + "\n"
+
+        self.moon_exec_code += self.moon_code_indent + "sw " + str(p_node.symb_table.search(p_node.moon_var_name).offset) + "(r14)," + local_reg4 + "\n"
+
+        self.register_pool.append(local_reg4)
+        self.register_pool.append(local_reg3)
+        self.register_pool.append(local_reg2)
+        self.register_pool.append(local_reg1)
 
     def visit_not_node(self, p_node: fn.NotNode):
         # Propagate down
@@ -238,9 +285,37 @@ class CodeGenerationVisitor(Visitor):
         self.propagate(p_node)
 
     def visit_f_call_node(self, p_node: fn.FCallNode):
-        # TODO: implement f_call
+        # TODO: f_call - Unconfirmed
         # Propagate down
         self.propagate(p_node)
+
+        local_reg1 = self.register_pool.pop()
+        params_list_node: fn.Node = p_node.leftmost_child.right_sibling
+        param_pointer: fn.Node = params_list_node.leftmost_child
+        function_table: SymbolTable = p_node.symb_table.search(p_node.leftmost_child.moon_var_name).element_link
+
+        # Code generation
+        self.moon_exec_code += self.moon_code_indent + "% processing: function call to " + p_node.leftmost_child.moon_var_name + "\n"
+
+        # Loop on params:
+        while param_pointer is not None:
+            self.moon_exec_code += self.moon_code_indent + "lw " + local_reg1 + "," + \
+                                   str(p_node.symb_table.search(param_pointer.moon_var_name).offset) + "(r14)\n"
+            param_offset: int = p_node.symb_table.table_size + function_table.search(param_pointer.moon_var_name).offset
+            # param_offset: int = p_node.symb_table.table_size + p_node.symb_table.search(param_pointer.moon_var_name).offset
+            self.moon_exec_code += self.moon_code_indent + "sw " + str(param_offset) + "(r14)," + local_reg1 + "\n"
+
+            param_pointer = param_pointer.right_sibling
+
+        self.moon_exec_code += self.moon_code_indent + "addi r14,r14," + str(p_node.symb_table.table_size) + "\n"
+        self.moon_exec_code += self.moon_code_indent + "jl r15," + p_node.leftmost_child.moon_var_name + "\n"  # TODO: generate random name
+        self.moon_exec_code += self.moon_code_indent + "subi r14,r14," + str(p_node.symb_table.table_size) + "\n"
+
+        self.moon_exec_code += self.moon_code_indent + "lw " + local_reg1 + "," + str(p_node.symb_table.table_size) + "(r14)\n"
+        self.moon_exec_code += self.moon_code_indent + "sw " + str(p_node.symb_table.search(p_node.moon_var_name).offset) + \
+                               "(r14)," + local_reg1 + "\n"
+
+        self.register_pool.append(local_reg1)
 
     def visit_index_list_node(self, p_node: fn.IndexListNode):
         # Propagate down

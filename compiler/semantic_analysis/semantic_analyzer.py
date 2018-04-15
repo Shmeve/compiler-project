@@ -41,7 +41,7 @@ class SemanticAnalyzer:
         """
         title: str = root_table.name + '  |  ' + str(root_table.table_size)
         data = [
-            ['Name', 'Kind', 'Type', 'Link']
+            ['Name', 'Kind', 'Type', 'Offset', 'Link']
         ]
 
         # Set up table data
@@ -49,7 +49,8 @@ class SemanticAnalyzer:
             row = [
                 s.element_name,
                 s.element_kind,
-                s.element_type
+                s.element_type,
+                s.offset
             ]
 
             if s.element_link is not None:

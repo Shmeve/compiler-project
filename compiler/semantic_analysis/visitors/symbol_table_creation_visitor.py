@@ -34,6 +34,13 @@ class SymbolTableCreationVisitor(Visitor):
                 pointer.symb_table = p_node.symb_table
                 pointer.accept(self)
 
+    def get_type(self, p_node: fn.Node):
+        if p_node.var_type[0] == "t":
+            p_node.var_type = p_node.symb_table.search(p_node.var_type).element_type
+            return self.get_type(p_node)
+        else:
+            return p_node.var_type
+
     def visit_null_node_node(self, p_node: fn.ConcreteNullNode):
         # Propagate down
         self.propagate(p_node)
@@ -147,6 +154,10 @@ class SymbolTableCreationVisitor(Visitor):
         self.propagate(p_node)
 
         p_node.moon_var_name = p_node.item.lexeme
+        p_node.var_type = p_node.symb_table.search(p_node.moon_var_name).element_type
+
+        if p_node.var_type != "" and p_node.var_type[0] == "t":
+            p_node.var_type = p_node.symb_table.search(p_node.var_type)
 
     def visit_type_node(self, p_node: fn.TypeNode):
         self.propagate(p_node)
@@ -241,6 +252,7 @@ class SymbolTableCreationVisitor(Visitor):
             p_node.symb_table.insert(local_entry)
             p_node.symb_table_element = local_entry
             p_node.var_type = param_type
+            p_node.moon_var_name = param_id
 
         # Propagate down
         self.propagate(p_node)
@@ -304,7 +316,7 @@ class SymbolTableCreationVisitor(Visitor):
         p_node.var_type = temp_var_type
 
         # Setup entry
-        local_entry: SymbolTableElement = SymbolTableElement(temp_var_name, "Temp Var", temp_var_type)
+        local_entry: SymbolTableElement = SymbolTableElement(temp_var_name, "Temp Var num", temp_var_type)
         p_node.symb_table_element = local_entry
         p_node.symb_table.insert(local_entry)
 
@@ -339,9 +351,10 @@ class SymbolTableCreationVisitor(Visitor):
         # Temp var
         temp_var_name = self.get_temp_var_name()
         p_node.moon_var_name = temp_var_name
+        p_node.var_type = self.get_type(p_node.leftmost_child)
 
         # Setup entry
-        local_entry: SymbolTableElement = SymbolTableElement(temp_var_name, "Temp Var", p_node.var_type)
+        local_entry: SymbolTableElement = SymbolTableElement(temp_var_name, "Temp Var add", p_node.var_type)
         p_node.symb_table.insert(local_entry)
         p_node.symb_table_element = local_entry
 
@@ -362,7 +375,7 @@ class SymbolTableCreationVisitor(Visitor):
         p_node.moon_var_name = temp_var_name
 
         # Setup entry
-        local_entry: SymbolTableElement = SymbolTableElement(temp_var_name, "Temp Var", p_node.var_type)
+        local_entry: SymbolTableElement = SymbolTableElement(temp_var_name, "Temp Var mult", p_node.var_type)
         p_node.symb_table.insert(local_entry)
         p_node.symb_table_element = local_entry
 
@@ -382,11 +395,11 @@ class SymbolTableCreationVisitor(Visitor):
         temp_var_name = self.get_temp_var_name()
         p_node.moon_var_name = temp_var_name
         temp_var_type = p_node.leftmost_child.var_type
+        p_node.var_type = temp_var_name
 
-        local_entry: SymbolTableElement = SymbolTableElement(temp_var_name, "temp_var", temp_var_type)
+        local_entry: SymbolTableElement = SymbolTableElement(temp_var_name, "var", temp_var_type)
         p_node.symb_table.insert(local_entry)
         p_node.symb_table_element = local_entry
-
 
     def visit_data_member_node(self, p_node: fn.DataMemberNode):
         # Propagate down
@@ -395,9 +408,10 @@ class SymbolTableCreationVisitor(Visitor):
         # Temp var
         temp_var_name = self.get_temp_var_name()
         p_node.moon_var_name = temp_var_name
-        temp_var_type = p_node.var_type
+        temp_var_type = p_node.leftmost_child.var_type
+        p_node.var_type = temp_var_type
 
-        local_entry: SymbolTableElement = SymbolTableElement(temp_var_name, "temp_var", temp_var_type)
+        local_entry: SymbolTableElement = SymbolTableElement(temp_var_name, "data_member", temp_var_type)
         p_node.symb_table.insert(local_entry)
         p_node.symb_table_element = local_entry
 
@@ -408,7 +422,8 @@ class SymbolTableCreationVisitor(Visitor):
         # Temp var
         temp_var_name = self.get_temp_var_name()
         p_node.moon_var_name = temp_var_name
-        temp_var_type = p_node.var_type
+        temp_var_type = p_node.leftmost_child.var_type
+        p_node.var_type = temp_var_type
 
         local_entry: SymbolTableElement = SymbolTableElement(temp_var_name, "f_call", temp_var_type)
         p_node.symb_table.insert(local_entry)

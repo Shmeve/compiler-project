@@ -1,7 +1,13 @@
+int addfunc() {
+    int c;
+    c = 10;
+    return(c);
+}
+
 program {
     int x;
-    x = 2+3-2;
-    y = 5;
-    z = x+y
-    put(z);
+    int y;
+    x = addfunc() + 5;
+    y = addfunc() + 3;
+    put(x);
 };
