@@ -3,7 +3,7 @@ from compiler.scanner.scanner import Scanner
 from compiler.parser.parser import Parser
 from compiler.semantic_analysis.semantic_analyzer import SemanticAnalyzer
 
-DEBUG_TEST_FILE = "compiler/samples/sample_5"
+DEBUG_TEST_FILE = "compiler/samples/sample_7"
 
 args_len: int = len(sys.argv)
 

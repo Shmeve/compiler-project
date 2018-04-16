@@ -35,7 +35,7 @@ class SymbolTableCreationVisitor(Visitor):
                 pointer.accept(self)
 
     def get_type(self, p_node: fn.Node):
-        if p_node.var_type[0] == "t":
+        if p_node.var_type != "" and p_node.var_type[0] == "t":
             p_node.var_type = p_node.symb_table.search(p_node.var_type).element_type
             return self.get_type(p_node)
         else:

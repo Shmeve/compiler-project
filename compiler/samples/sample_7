@@ -1,5 +1,23 @@
+class A {
+    int member1;
+};
+
+class A:B {
+    int member2;
+    int memberFunction1(int x, int y);
+};
+
+int A::memberFunction(int x, int y) {
+    int r;
+    r = x + y;
+    return(r);
+};
+
 program {
-int x;
-x = 10;
-put(x);
+    int var1[10][10];
+    int var2[20];
+    int a;
+
+    a = ((100-50)/2)-5 * 5;
+    put(a);
 };
