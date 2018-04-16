@@ -1,17 +1,16 @@
 class Utility {
+    int b;
     int a();
 };
 
 int Utility::a() {
     int x;
-    x = 2;
-    return x;
+    x = (5+5)/2;
+    return(x);
 };
 
 program {
-    Utility b;
-    int c;
-    c = b.a();
-
-    put(c);
+    Utility u;
+    u.b = u.a();
+    put(u.b);
 };

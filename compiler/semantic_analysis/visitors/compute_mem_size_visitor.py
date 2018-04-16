@@ -186,6 +186,8 @@ class ComputerMemSizeVisitor(Visitor):
     def visit_var_node(self, p_node: fn.VarNode):
         self.propagate(p_node)
 
+        p_node.symb_table.search(p_node.moon_var_name).size = self.size_of_entry(p_node)
+
     def visit_data_member_node(self, p_node: fn.DataMemberNode):
         self.propagate(p_node)
 

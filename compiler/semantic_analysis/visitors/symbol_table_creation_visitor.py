@@ -391,29 +391,35 @@ class SymbolTableCreationVisitor(Visitor):
         # Propagate down
         self.propagate(p_node)
 
-        # Temp var
-        temp_var_name = self.get_temp_var_name()
-        p_node.moon_var_name = temp_var_name
-        temp_var_type = p_node.leftmost_child.var_type
-        p_node.var_type = temp_var_name
+        if p_node.leftmost_sibling == p_node:
+            # Use child var
+            p_node.moon_var_name = p_node.leftmost_child.moon_var_name
+            temp_var_type = p_node.leftmost_child.var_type
+            p_node.var_type = temp_var_type
+        elif p_node.parent.node_type == "addOp" or p_node.parent.node_type == "multOp":
+            # Use child var
+            p_node.moon_var_name = p_node.leftmost_child.moon_var_name
+            temp_var_type = p_node.leftmost_child.var_type
+            p_node.var_type = temp_var_type
+        else:
+            # Temp var
+            temp_var_name = self.get_temp_var_name()
+            p_node.moon_var_name = temp_var_name
+            temp_var_type = p_node.leftmost_child.var_type
+            p_node.var_type = temp_var_name
 
-        local_entry: SymbolTableElement = SymbolTableElement(temp_var_name, "var", temp_var_type)
-        p_node.symb_table.insert(local_entry)
-        p_node.symb_table_element = local_entry
+            local_entry: SymbolTableElement = SymbolTableElement(temp_var_name, "var", temp_var_type)
+            p_node.symb_table.insert(local_entry)
+            p_node.symb_table_element = local_entry
 
     def visit_data_member_node(self, p_node: fn.DataMemberNode):
         # Propagate down
         self.propagate(p_node)
 
         # Temp var
-        temp_var_name = self.get_temp_var_name()
-        p_node.moon_var_name = temp_var_name
+        p_node.moon_var_name = p_node.leftmost_child.moon_var_name
         temp_var_type = p_node.leftmost_child.var_type
         p_node.var_type = temp_var_type
-
-        local_entry: SymbolTableElement = SymbolTableElement(temp_var_name, "data_member", temp_var_type)
-        p_node.symb_table.insert(local_entry)
-        p_node.symb_table_element = local_entry
 
     def visit_f_call_node(self, p_node: fn.FCallNode):
         # Propagate down

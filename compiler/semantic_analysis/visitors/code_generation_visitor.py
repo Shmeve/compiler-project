@@ -170,7 +170,7 @@ class CodeGenerationVisitor(Visitor):
         self.moon_exec_code += self.moon_code_indent + "% processing: put(" + p_node.leftmost_child.moon_var_name + ")\n"
         self.moon_exec_code += self.moon_code_indent + "lw " + local_reg1 + "," +\
                                str(p_node.symb_table.search(p_node.leftmost_child.moon_var_name).offset) + "(r14)\n"
-
+        self.moon_exec_code += self.moon_code_indent + "addi r14,r14," + str(p_node.symb_table.table_size) + "\n"
         self.moon_exec_code += self.moon_code_indent + "sw -8(r14)," + local_reg1 + "\n"
         self.moon_exec_code += self.moon_code_indent + "% link buffer to stack\n"
         self.moon_exec_code += self.moon_code_indent + "addi " + local_reg1 + ",r0, buf\n"
@@ -289,10 +289,18 @@ class CodeGenerationVisitor(Visitor):
         # Propagate down
         self.propagate(p_node)
 
-        local_reg1 = self.register_pool.pop()
-        params_list_node: fn.Node = p_node.leftmost_child.right_sibling
-        param_pointer: fn.Node = params_list_node.leftmost_child
-        function_table: SymbolTable = p_node.symb_table.search(p_node.leftmost_child.moon_var_name).element_link
+        if p_node.leftmost_sibling is not p_node:
+            local_reg1 = self.register_pool.pop()
+            params_list_node: fn.Node = p_node.leftmost_child.right_sibling
+            param_pointer: fn.Node = params_list_node.leftmost_child
+            function_table: SymbolTable = p_node.symb_table.search(p_node.leftmost_child.moon_var_name).element_link
+            param_index: int = 0
+        else:
+            local_reg1 = self.register_pool.pop()
+            params_list_node: fn.Node = p_node.leftmost_child.right_sibling
+            param_pointer: fn.Node = params_list_node.leftmost_child
+            function_table: SymbolTable = p_node.symb_table.search(p_node.leftmost_child.moon_var_name).element_link
+            param_index: int = 0
 
         # Code generation
         self.moon_exec_code += self.moon_code_indent + "% processing: function call to " + p_node.leftmost_child.moon_var_name + "\n"
@@ -301,11 +309,12 @@ class CodeGenerationVisitor(Visitor):
         while param_pointer is not None:
             self.moon_exec_code += self.moon_code_indent + "lw " + local_reg1 + "," + \
                                    str(p_node.symb_table.search(param_pointer.moon_var_name).offset) + "(r14)\n"
-            param_offset: int = p_node.symb_table.table_size + function_table.search(param_pointer.moon_var_name).offset
+            param_offset: int = p_node.symb_table.table_size + function_table.symbols[param_index].offset
             # param_offset: int = p_node.symb_table.table_size + p_node.symb_table.search(param_pointer.moon_var_name).offset
             self.moon_exec_code += self.moon_code_indent + "sw " + str(param_offset) + "(r14)," + local_reg1 + "\n"
 
             param_pointer = param_pointer.right_sibling
+            param_index += 1
 
         self.moon_exec_code += self.moon_code_indent + "addi r14,r14," + str(p_node.symb_table.table_size) + "\n"
         self.moon_exec_code += self.moon_code_indent + "jl r15," + p_node.leftmost_child.moon_var_name + "\n"  # TODO: generate random name

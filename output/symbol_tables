@@ -1,36 +1,23 @@
-+Global  |  0--------+-------+--------+------+
-| Name    | Kind     | Type  | Offset | Link |
-+---------+----------+-------+--------+------+
-| addfunc | function | int:  | 0      | ✔    |
-| program | function |       | 0      | ✔    |
-+---------+----------+-------+--------+------+
-	+addfunc  |  -16------+------+--------+------+
++Global  |  0--------+--------------+--------+------+
+| Name    | Kind     | Type         | Offset | Link |
++---------+----------+--------------+--------+------+
+| addfunc | function | int: int,int | 0      | ✔    |
+| program | function |              | 0      | ✔    |
++---------+----------+--------------+--------+------+
+	+addfunc  |  -24------+------+--------+------+
 	| Name | Kind         | Type | Offset | Link |
 	+------+--------------+------+--------+------+
-	| c    | variable     | int  | -12    | ⨯    |
-	| t1   | data_member  | int  | -12    | ⨯    |
-	| t2   | var          | int  | -12    | ⨯    |
-	| t3   | Temp Var num | int  | -16    | ⨯    |
-	| t4   | data_member  | int  | -16    | ⨯    |
-	| t5   | var          | int  | -16    | ⨯    |
+	| a    | Parameter    | int  | -12    | ⨯    |
+	| b    | Parameter    | int  | -16    | ⨯    |
+	| r    | variable     | int  | -20    | ⨯    |
+	| t1   | Temp Var add | int  | -24    | ⨯    |
 	+------+--------------+------+--------+------+
-	+Program  |  -32------+-------+--------+------+
-	| Name | Kind         | Type  | Offset | Link |
-	+------+--------------+-------+--------+------+
-	| x    | variable     | int   | -4     | ⨯    |
-	| y    | variable     | int   | -8     | ⨯    |
-	| t6   | data_member  | int   | -8     | ⨯    |
-	| t7   | var          | int   | -8     | ⨯    |
-	| t8   | f_call       | int:  | -12    | ⨯    |
-	| t9   | var          | int:  | -12    | ⨯    |
-	| t10  | Temp Var num | int   | -16    | ⨯    |
-	| t11  | Temp Var add | int:  | -20    | ⨯    |
-	| t12  | data_member  | int   | -20    | ⨯    |
-	| t13  | var          | int   | -20    | ⨯    |
-	| t14  | f_call       | int:  | -24    | ⨯    |
-	| t15  | var          | int:  | -24    | ⨯    |
-	| t16  | Temp Var num | int   | -28    | ⨯    |
-	| t17  | Temp Var add | int:  | -32    | ⨯    |
-	| t18  | data_member  | int   | -32    | ⨯    |
-	| t19  | var          | int   | -32    | ⨯    |
-	+------+--------------+-------+--------+------+
+	+Program  |  -20------+--------------+--------+------+
+	| Name | Kind         | Type         | Offset | Link |
+	+------+--------------+--------------+--------+------+
+	| x    | variable     | int          | -4     | ⨯    |
+	| t2   | Temp Var num | int          | -8     | ⨯    |
+	| t3   | Temp Var num | int          | -12    | ⨯    |
+	| t4   | f_call       | int: int,int | -16    | ⨯    |
+	| t5   | var          | int: int,int | -20    | ⨯    |
+	+------+--------------+--------------+--------+------+

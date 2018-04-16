@@ -15,206 +15,209 @@ digraph {
 	5 [label="varDecl
 x"]
 	3 -> 5
-	6 [label="varDecl
-y"]
+	6 [label=assignStat
+]
 	3 -> 6
-	7 [label=assignStat
+	7 [label=putStat
 ]
 	3 -> 7
-	8 [label=assignStat
-]
-	3 -> 8
-	9 [label=putStat
-]
-	3 -> 9
-	10 [label="type
+	8 [label="type
 T_R_INT
 int
 "]
-	4 -> 10
-	11 [label="id
+	4 -> 8
+	9 [label="id
 T_A_ID
 addfunc
 addfunc"]
+	4 -> 9
+	10 [label=ConcreteNull
+]
+	4 -> 10
+	11 [label=fparamList
+]
 	4 -> 11
-	12 [label=ConcreteNull
+	12 [label=statBlock
 ]
 	4 -> 12
-	13 [label=fparamList
-]
-	4 -> 13
-	14 [label=statBlock
-]
-	4 -> 14
-	15 [label="type
+	13 [label="type
 T_R_INT
 int
 "]
+	5 -> 13
+	14 [label="id
+T_A_ID
+x
+x"]
+	5 -> 14
+	15 [label=dimList
+]
 	5 -> 15
-	16 [label="id
-T_A_ID
-x
+	16 [label="var
 x"]
-	5 -> 16
-	17 [label=dimList
-]
-	5 -> 17
-	18 [label="type
-T_R_INT
-int
-"]
-	6 -> 18
-	19 [label="id
-T_A_ID
-y
-y"]
-	6 -> 19
-	20 [label=dimList
-]
-	6 -> 20
-	21 [label="var
-t7"]
-	7 -> 21
-	22 [label="addOp
-T_R_PLUS
-
-t11"]
-	7 -> 22
-	23 [label="var
-t13"]
-	8 -> 23
-	24 [label="addOp
-T_R_PLUS
-
-t17"]
-	8 -> 24
-	25 [label="var
-t19"]
-	9 -> 25
-	26 [label="varDecl
-c"]
-	14 -> 26
-	27 [label=assignStat
-]
-	14 -> 27
-	28 [label=returnStat
-]
-	14 -> 28
-	29 [label="dataMember
-t6"]
-	21 -> 29
-	30 [label="var
-t9"]
-	22 -> 30
-	31 [label="num
-T_A_INTEGER
-5
-t10"]
-	22 -> 31
-	32 [label="dataMember
-t12"]
-	23 -> 32
-	33 [label="var
-t15"]
-	24 -> 33
-	34 [label="num
-T_A_INTEGER
-3
-t16"]
-	24 -> 34
-	35 [label="dataMember
-t18"]
-	25 -> 35
-	36 [label="type
-T_R_INT
-int
-"]
-	26 -> 36
-	37 [label="id
-T_A_ID
-c
-c"]
-	26 -> 37
-	38 [label=dimList
-]
-	26 -> 38
-	39 [label="var
-t2"]
-	27 -> 39
-	40 [label="num
-T_A_INTEGER
-10
-t3"]
-	27 -> 40
-	41 [label="var
+	6 -> 16
+	17 [label="var
 t5"]
-	28 -> 41
-	42 [label="id
-T_A_ID
-x
+	6 -> 17
+	18 [label="var
 x"]
-	29 -> 42
-	43 [label=indexList
+	7 -> 18
+	19 [label="fparam
+a"]
+	11 -> 19
+	20 [label="fparam
+b"]
+	11 -> 20
+	21 [label="varDecl
+r"]
+	12 -> 21
+	22 [label=assignStat
 ]
-	29 -> 43
-	44 [label="fCall
-t8"]
-	30 -> 44
-	45 [label="id
-T_A_ID
-y
-y"]
-	32 -> 45
-	46 [label=indexList
+	12 -> 22
+	23 [label=returnStat
 ]
-	32 -> 46
-	47 [label="fCall
-t14"]
-	33 -> 47
-	48 [label="id
-T_A_ID
-x
+	12 -> 23
+	24 [label="dataMember
 x"]
-	35 -> 48
-	49 [label=indexList
-]
-	35 -> 49
-	50 [label="dataMember
-t1"]
-	39 -> 50
-	51 [label="dataMember
+	16 -> 24
+	25 [label="fCall
 t4"]
-	41 -> 51
-	52 [label="id
+	17 -> 25
+	26 [label="dataMember
+x"]
+	18 -> 26
+	27 [label="type
+T_R_INT
+int
+"]
+	19 -> 27
+	28 [label="id
 T_A_ID
-addfunc
-addfunc"]
-	44 -> 52
-	53 [label=aParams
+a
+a"]
+	19 -> 28
+	29 [label=dimList
 ]
-	44 -> 53
-	54 [label="id
+	19 -> 29
+	30 [label="type
+T_R_INT
+int
+"]
+	20 -> 30
+	31 [label="id
+T_A_ID
+b
+b"]
+	20 -> 31
+	32 [label=dimList
+]
+	20 -> 32
+	33 [label="type
+T_R_INT
+int
+"]
+	21 -> 33
+	34 [label="id
+T_A_ID
+r
+r"]
+	21 -> 34
+	35 [label=dimList
+]
+	21 -> 35
+	36 [label="var
+r"]
+	22 -> 36
+	37 [label="addOp
+T_R_PLUS
+
+t1"]
+	22 -> 37
+	38 [label="var
+r"]
+	23 -> 38
+	39 [label="id
+T_A_ID
+x
+x"]
+	24 -> 39
+	40 [label=indexList
+]
+	24 -> 40
+	41 [label="id
 T_A_ID
 addfunc
 addfunc"]
+	25 -> 41
+	42 [label=aParams
+]
+	25 -> 42
+	43 [label="id
+T_A_ID
+x
+x"]
+	26 -> 43
+	44 [label=indexList
+]
+	26 -> 44
+	45 [label="dataMember
+r"]
+	36 -> 45
+	46 [label="var
+a"]
+	37 -> 46
+	47 [label="var
+b"]
+	37 -> 47
+	48 [label="dataMember
+r"]
+	38 -> 48
+	49 [label="num
+T_A_INTEGER
+15
+t2"]
+	42 -> 49
+	50 [label="num
+T_A_INTEGER
+4
+t3"]
+	42 -> 50
+	51 [label="id
+T_A_ID
+r
+r"]
+	45 -> 51
+	52 [label=indexList
+]
+	45 -> 52
+	53 [label="dataMember
+a"]
+	46 -> 53
+	54 [label="dataMember
+b"]
 	47 -> 54
-	55 [label=aParams
-]
-	47 -> 55
-	56 [label="id
+	55 [label="id
 T_A_ID
-c
-c"]
-	50 -> 56
-	57 [label=indexList
+r
+r"]
+	48 -> 55
+	56 [label=indexList
 ]
-	50 -> 57
-	58 [label="id
+	48 -> 56
+	57 [label="id
 T_A_ID
-c
-c"]
-	51 -> 58
-	59 [label=indexList
+a
+a"]
+	53 -> 57
+	58 [label=indexList
 ]
-	51 -> 59
+	53 -> 58
+	59 [label="id
+T_A_ID
+b
+b"]
+	54 -> 59
+	60 [label=indexList
+]
+	54 -> 60
 }

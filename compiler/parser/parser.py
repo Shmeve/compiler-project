@@ -10,6 +10,7 @@ from compiler.datastructures.AST import ast_factory_creators as fc
 from compiler.datastructures.AST import ast_factory_nodes as fn
 from compiler.datastructures.AST.abstract_syntax_tree import AbstractSyntaxTree
 from compiler.datastructures.graphvis_node import GraphvizNode
+from compiler.tools import constants
 from graphviz import Digraph
 
 
