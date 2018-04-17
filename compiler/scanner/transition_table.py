@@ -114,4 +114,9 @@ class TransitionTable:
         :param current_char:
         :return: int
         """
-        return self.table[current_state][current_char]
+
+        for k in self.table[current_state].keys():
+            if current_char == k:
+                return self.table[current_state][current_char]
+
+        return 56
