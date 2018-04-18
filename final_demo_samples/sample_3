@@ -4,7 +4,12 @@ class A {
 
 class B {
     int member2;
+    float member3;
     int memberFunction1(int x, int y);
+};
+
+class C : A {
+    int member;
 };
 
 int A::memberFunction(int x, int y) {
@@ -13,11 +18,16 @@ int A::memberFunction(int x, int y) {
     return(r);
 };
 
+int freeFunction(int j, int k) {
+    return(j+k);
+};
+
 program {
     int var1[10][10];
     int var2[20];
-    int a;
+    int x;
+    A a[1][2];
 
-    a = ((100-50)/2)-5 * 5;
-    put(a);
+    x = ((100-50)/2)-5 * 5;
+    put(x);
 };

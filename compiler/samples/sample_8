@@ -1,5 +1,5 @@
 program {
     int value;
-    value = not ((10 and 0) or 1);
+    value = 12.34e01;
     put(value);
 };
