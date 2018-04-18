@@ -1,9 +1,8 @@
 import sys
 from compiler.scanner.scanner import Scanner
 from compiler.parser.parser import Parser
-from compiler.semantic_analysis.semantic_analyzer import SemanticAnalyzer
 
-DEBUG_TEST_FILE = "final_demo_samples/sample_8"
+DEBUG_TEST_FILE = "final_demo_samples/sample_3"
 
 args_len: int = len(sys.argv)
 
@@ -33,12 +32,3 @@ else:
     print('----------\nParsed: ' + str(result))
     print('----------\n')
 
-print("----------\nSemantic Analysis\n----------")
-sa: SemanticAnalyzer = SemanticAnalyzer(p.ast_root)
-sa.analyze()
-p.visualize_ast('output/ast')
-
-if args_len >= 3:
-    sa.log_results(sys.argv[2], sa.global_table)
-else:
-    sa.log_results(root_node=sa.global_table)
