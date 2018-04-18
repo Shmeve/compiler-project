@@ -211,7 +211,6 @@ class Parser:
             return True
 
     def skip_errors(self, t: Token):
-        # TODO: Implement error recovery
         self.parse_stack.pop()
         with open("output/parse_error", "a") as f:
             f.write(t.token + " " + str(t.line) + " " + str(t.column) + "\n")
@@ -268,8 +267,6 @@ class Parser:
                         break
                 if completed:
                     return k
-
-        # TODO: the single production found is not being pushed to stack
 
         return ""
 
@@ -498,7 +495,6 @@ class Parser:
         :param node_type: type of node being created (leading '@' stripped by parser)
         :return: bool
         """
-        # TODO: List all required node types
         nodes_requiring_token: list = [
             'prog',
             'type',

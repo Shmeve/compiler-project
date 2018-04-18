@@ -383,6 +383,15 @@ class SymbolTableCreationVisitor(Visitor):
         # Propagate down
         self.propagate(p_node)
 
+        # Temp var
+        temp_var_name = self.get_temp_var_name()
+        p_node.moon_var_name = temp_var_name
+
+        # Setup entry
+        local_entry: SymbolTableElement = SymbolTableElement(temp_var_name, "Temp Var not", p_node.var_type)
+        p_node.symb_table.insert(local_entry)
+        p_node.symb_table_element = local_entry
+
     def visit_sign_node(self, p_node: fn.SignNode):
         # Propagate down
         self.propagate(p_node)

@@ -1,0 +1,5 @@
+program {
+    int value;
+    value = not ((10 and 0) or 1);
+    put(value);
+};

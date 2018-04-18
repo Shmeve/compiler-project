@@ -61,7 +61,6 @@ class CodeGenerationVisitor(Visitor):
         self.propagate(p_node)
 
     def visit_func_def_node(self, p_node: fn.FuncDefNode):
-        # TODO: func_def - Unconfirmed
         # Locate id node
         local_id_node: fn.Node
 
@@ -188,7 +187,6 @@ class CodeGenerationVisitor(Visitor):
         self.register_pool.append(local_reg1)
 
     def visit_return_stat_node(self, p_node: fn.ReturnStatNode):
-        # TODO: implement return_stat
         local_reg1 = self.register_pool.pop()
 
         # Propagate down
@@ -219,8 +217,10 @@ class CodeGenerationVisitor(Visitor):
 
         if p_node.item.token == "T_R_PLUS":
             self.moon_exec_code += self.moon_code_indent + "add " + local_reg4 + "," + local_reg2 + "," + local_reg3 + "\n"
-        else:
+        elif p_node.item.token == "T_R_MINUS":
             self.moon_exec_code += self.moon_code_indent + "sub " + local_reg4 + "," + local_reg2 + "," + local_reg3 + "\n"
+        elif p_node.item.token == "T_R_OR":
+            self.moon_exec_code += self.moon_code_indent + "or " + local_reg4 + "," + local_reg2 + "," + local_reg3 + "\n"
 
         self.moon_exec_code += self.moon_code_indent + "sw " + str(p_node.symb_table.search(p_node.moon_var_name).offset) + "(r14)," + \
                                local_reg4 + "\n"
@@ -258,8 +258,10 @@ class CodeGenerationVisitor(Visitor):
 
         if p_node.item.token == "T_R_MULTIPLY":
             self.moon_exec_code += self.moon_code_indent + "mul " + local_reg4 + "," + local_reg2 + "," + local_reg3 + "\n"
-        else:
+        elif p_node.item.token == "T_R_DIVIDE":
             self.moon_exec_code += self.moon_code_indent + "div " + local_reg4 + "," + local_reg2 + "," + local_reg3 + "\n"
+        elif p_node.item.token == "T_R_AND":
+            self.moon_exec_code += self.moon_code_indent + "and " + local_reg4 + "," + local_reg2 + "," + local_reg3 + "\n"
 
         self.moon_exec_code += self.moon_code_indent + "sw " + str(p_node.symb_table.search(p_node.moon_var_name).offset) + "(r14)," + local_reg4 + "\n"
 
@@ -271,6 +273,23 @@ class CodeGenerationVisitor(Visitor):
     def visit_not_node(self, p_node: fn.NotNode):
         # Propagate down
         self.propagate(p_node)
+
+        local_reg1: str = self.register_pool.pop()
+        local_reg2: str = self.register_pool.pop()
+        local_reg3: str = self.register_pool.pop()
+
+        self.moon_exec_code += self.moon_code_indent + "% processing: " + "not " + \
+                              p_node.leftmost_child.moon_var_name + "\n"
+        self.moon_exec_code += self.moon_code_indent + "lw " + local_reg2 + "," + str(p_node.symb_table.search(p_node.leftmost_child.moon_var_name).offset) + \
+                              "(r14)\n"
+        self.moon_exec_code += self.moon_code_indent + "not " + local_reg3 + "," + local_reg2 + "\n"
+
+        self.moon_exec_code += self.moon_code_indent + "sw " + str(p_node.symb_table.search(p_node.moon_var_name).offset) + "(r14)," + \
+                               local_reg3 + "\n"
+
+        self.register_pool.append(local_reg3)
+        self.register_pool.append(local_reg2)
+        self.register_pool.append(local_reg1)
 
     def visit_sign_node(self, p_node: fn.SignNode):
         # Propagate down
@@ -285,7 +304,6 @@ class CodeGenerationVisitor(Visitor):
         self.propagate(p_node)
 
     def visit_f_call_node(self, p_node: fn.FCallNode):
-        # TODO: f_call - Unconfirmed
         # Propagate down
         self.propagate(p_node)
 
@@ -317,7 +335,7 @@ class CodeGenerationVisitor(Visitor):
             param_index += 1
 
         self.moon_exec_code += self.moon_code_indent + "addi r14,r14," + str(p_node.symb_table.table_size) + "\n"
-        self.moon_exec_code += self.moon_code_indent + "jl r15," + p_node.leftmost_child.moon_var_name + "\n"  # TODO: generate random name
+        self.moon_exec_code += self.moon_code_indent + "jl r15," + p_node.leftmost_child.moon_var_name + "\n"
         self.moon_exec_code += self.moon_code_indent + "subi r14,r14," + str(p_node.symb_table.table_size) + "\n"
 
         self.moon_exec_code += self.moon_code_indent + "lw " + local_reg1 + "," + str(p_node.symb_table.table_size) + "(r14)\n"
