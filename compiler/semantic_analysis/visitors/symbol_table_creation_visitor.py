@@ -76,6 +76,7 @@ class SymbolTableCreationVisitor(Visitor):
         local_entry: SymbolTableElement = SymbolTableElement(class_name, "class", "", local_table)
         p_node.symb_table.insert(local_entry)
         p_node.symb_table = local_table
+        p_node.moon_var_name = class_name
 
         self.propagate(p_node)
 
@@ -373,6 +374,7 @@ class SymbolTableCreationVisitor(Visitor):
         # Temp var
         temp_var_name = self.get_temp_var_name()
         p_node.moon_var_name = temp_var_name
+        p_node.var_type = self.get_type(p_node.leftmost_child)
 
         # Setup entry
         local_entry: SymbolTableElement = SymbolTableElement(temp_var_name, "Temp Var mult", p_node.var_type)

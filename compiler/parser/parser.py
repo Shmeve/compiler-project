@@ -29,6 +29,7 @@ class Parser:
         self.parse_table: ParsingTable = ParsingTable()
         self.error: bool = False
         self.sentential: LinkedList = LinkedList()
+        self.parse_errors: list = []
 
         self.token_sequence.append(Token(0, 0, '$'))
 
@@ -211,10 +212,9 @@ class Parser:
             return True
 
     def skip_errors(self, t: Token):
+        error_log_item: str = t.token + " " + str(t.line) + " " + str(t.column)
         self.parse_stack.pop()
-        with open("output/parse_error", "a") as f:
-            f.write(t.token + " " + str(t.line) + " " + str(t.column) + "\n")
-        return None
+        self.parse_errors.append(error_log_item)
 
     def next_token(self) -> Token:
         """
@@ -279,6 +279,7 @@ class Parser:
         """
         if to_file:
             file = 'output/parse'
+            error_file = 'output/parse_error'
 
             with open(file, 'w') as f:
                 for l in self.output:
@@ -287,11 +288,20 @@ class Parser:
                     print("Rule Used: " + l["rule"])
                     print("Sentential Form: " + l["sentential"])
                     print("\n")
+
+            with open(error_file, 'w') as ef:
+                for e in self.parse_errors:
+                    ef.write(e+"\n")
+                    print(e)
+
         else:
             for l in self.output:
                 print("Rule Used: " + l["rule"])
                 print("Sentential Form: " + l["sentential"])
                 print("\n")
+
+            for e in self.parse_errors:
+                print(e)
 
     def generate_linked_list_of_predict_rhs(self, rhs: list) -> LinkedList:
         """

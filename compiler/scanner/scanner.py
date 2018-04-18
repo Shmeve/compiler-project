@@ -170,6 +170,8 @@ class Scanner:
         :param to_file: flag to optionally print results to files for validation
         :return: None
         """
+        error_msg_log = []
+
         if to_file:
             token_file = open('output/tokens', 'w')
             error_file = open('output/errors', 'w')
@@ -180,6 +182,8 @@ class Scanner:
                         t.get_error_message(), t.line, t.column
                     ))
 
+                    error_msg_log.append('{:s} at line {:d}, position {:d}\n'.format(t.get_error_message(), t.line, t.column))
+
                 token_file.write(t.token+' ')
 
                 print('{:s} {:s} {:d},{:d}'.format(t.token, t.lexeme, t.line, t.column))
@@ -189,3 +193,11 @@ class Scanner:
         else:
             for t in self.sequence:
                 print('{:s} {:s} {:d},{:d}'.format(t.token, t.lexeme, t.line, t.column))
+
+                if t.is_error():
+                    error_msg_log.append('{:s} at line {:d}, position {:d}\n'.format(t.get_error_message(), t.line, t.column))
+
+        if len(error_msg_log) > 0:
+            print("\nScanner Errors:")
+            for e in error_msg_log:
+                print(e)
